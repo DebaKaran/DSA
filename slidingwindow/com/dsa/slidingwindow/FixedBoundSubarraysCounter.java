@@ -1,3 +1,8 @@
+
+//Leetcode Problem: https://leetcode.com/problems/count-subarrays-with-fixed-bounds/
+
+//Time Complexity: O(n)  
+//Space Complexity: O(1)
 public class FixedBoundSubarraysCounter {
 
     public long countSubarrays(int[] nums, int minK, int maxK) {
