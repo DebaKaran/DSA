@@ -3,6 +3,7 @@
 
 import java.util.Arrays;
 import java.util.Stack;
+import java.util.TreeSet;
 
 public class Smallestonleft {
  // Function for finding maximum and value pair
@@ -11,9 +12,34 @@ public class Smallestonleft {
         // return findSmallestonleftUsingBruteForce(arr, n);
 
          //Using Two Stacks
-        return findSmallestonleftUsingTwoStocks(arr, n);
+        //return findSmallestonleftUsingTwoStocks(arr, n);
+
+        return findSmallestonleftUsingTreeSet(arr, n);
     }
 
+    //Using TreeSet
+    // Time: O(n log n) → n iterations × log n per TreeSet operation.
+
+    // Space: O(n) → In the worst case, all elements get stored in the TreeSet.
+
+       private static int[] findSmallestonleftUsingTreeSet(int arr[], int n) {
+        int[] result = new int[n];
+        Arrays.fill(result, -1);
+        TreeSet<Integer> set = new TreeSet<>();
+        set.add(arr[0]);
+        result[0] = -1;
+        for(int i = 1; i < n; i++) {
+            int val = arr[i];
+            Integer smaller = set.lower(val);
+            if(smaller != null) {
+                result[i] = smaller;
+            }
+            set.add(val);
+        }
+        
+        return result;
+    }
+    
     //
     //Using Two Stacks
     // Time Complexity
