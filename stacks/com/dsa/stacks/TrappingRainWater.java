@@ -2,7 +2,39 @@
 // Problem Link: https://leetcode.com/problems/trapping-rain-water/
 public class TrappingRainWater {
      public int trap(int[] height) {
-        return calculateTrappedWater(height);
+        //return calculateTrappedWater(height);
+        return calculateTrappedWaterUsingTwoPointers(height);
+    }
+
+    private int calculateTrappedWaterUsingTwoPointers(int[] height) {
+        int n = height.length;       // Number of bars in the elevation map
+        int total = 0;               // Total trapped water
+        int left = 0;                 // Pointer starting from left side
+        int right = n - 1;            // Pointer starting from right side
+        int lMax = 0;                 // Highest bar seen so far from the left
+        int rMax = 0;                 // Highest bar seen so far from the right
+
+        // Process until the two pointers meet
+        while (left < right) {
+            // Update left max and right max heights
+            lMax = Math.max(lMax, height[left]);
+            rMax = Math.max(rMax, height[right]);
+
+            // Decide which side to process
+            if (lMax <= rMax) {
+                // If left's max is smaller, trapped water is limited by lMax
+                // Water trapped at 'left' = lMax - height[left]
+                total += (lMax - height[left]);
+                left++; // Move left pointer inward
+            } else {
+                // If right's max is smaller, trapped water is limited by rMax
+                // Water trapped at 'right' = rMax - height[right]
+                total += (rMax - height[right]);
+                right--; // Move right pointer inward
+            }
+         }
+
+        return total; // Final accumulated trapped water
     }
 
     // Time complexity: O(n) due to single pass through the array.
