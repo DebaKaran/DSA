@@ -1,7 +1,9 @@
 //Leetcode Problem: 907. Sum of Subarray Minimums
 // Problem Link: https://leetcode.com/problems/sum-of-subarray-minimums/
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.Stack;
 
 public class SubarrayMinimumSumCalculator {
@@ -9,9 +11,72 @@ public class SubarrayMinimumSumCalculator {
         //Brute Force - time limit exceed issue
         //return sumSubarrayMinsUsingBruteForce(arr);
 
-        return calculateMinimumSubarraySumUsingNSLAndNSR(arr);
+        // return calculateMinimumSubarraySumUsingNSLAndNSR(arr);
+        return calculateMinimumSubarraySumUsingNSLAndNSRWithDeque(arr);
+    }
+    
+    private int calculateMinimumSubarraySumUsingNSLAndNSRWithDeque(int[] nums) {
+        final long MOD = 1_000_000_007;
+        int n = nums.length;
+        int[] nsl = new int[n];
+        int[] nsr = new int[n];
+        findNextSmallerToRightIndicesUsingDeque(nums, nsr);
+        findNextSmallerToLeftIndicesUsingDeque(nums, nsl);
+        long sum = 0;
+
+        for(int i = 0; i < n; i++) {
+            long leftLen = i - nsl[i];
+            long rightLen = nsr[i] - i;
+
+            long total = leftLen * rightLen * nums[i];
+            sum = (sum + total) % MOD;
+        }
+
+        return (int)sum;
+
     }
 
+    private void findNextSmallerToRightIndicesUsingDeque(int[] nums, int[] nsr) {
+        int n = nums.length;
+        Deque<Integer> stack = new ArrayDeque<>(); 
+
+        for (int i = n - 1; i >= 0; i--) {
+            int val = nums[i];
+
+            // Pop until we find a smaller value or stack becomes empty
+            while (!stack.isEmpty() && val <= nums[stack.peek()]) {
+                stack.pop();
+            }
+
+            // If stack not empty, top is the nearest smaller element's index
+            nsr[i] = stack.isEmpty() ? n : stack.peek();
+           
+
+            // Push current index to be a candidate for future elements
+            stack.push(i);
+        }
+    }
+
+    private void findNextSmallerToLeftIndicesUsingDeque(int[] nums, int[] nsl) {
+        int n = nums.length;
+        Deque<Integer> stack = new ArrayDeque<>(); 
+
+        for (int i = 0; i < n; i++) {
+            int val = nums[i];
+
+            // Pop until we find a smaller value or stack becomes empty
+            while (!stack.isEmpty() && val < nums[stack.peek()]) {
+                stack.pop();
+            }
+
+            // If stack not empty, top is the nearest smaller element's index
+            nsl[i] = stack.isEmpty() ? - 1: stack.peek();
+
+
+            // Push current index to be a candidate for future elements
+            stack.push(i);
+        }
+    }
     // This method calculates the sum of minimums of all subarrays using the Next Smaller to Left (NSL)
     // and Next Smaller to Right (NSR) approach. It finds the indices of the nearest smaller elements
     // to the left and right for each element, calculates the number of subarrays where each element is the minimum,
