@@ -29,13 +29,18 @@ public class SubarrayMinimumSumCalculator {
         long sum = 0;
 
         for(int i = 0; i < n; i++) {
-            int leftLen = i - nsl[i];
-            int rightLen = nsr[i] - i;
+        
+            //int leftLen = i - nsl[i];
+            //int rightLen = nsr[i] - i;
+            // long totalSubArrayCount = (leftLen * rightLen) % MOD;
+            // long totalSubarraySum = (totalSubArrayCount * nums[i]) % MOD;
 
-            long totalSubArrayCount = (leftLen * rightLen) % MOD;
-            long totalSubarraySum = (totalSubArrayCount * nums[i]) % MOD;
-
-            sum = (sum + totalSubarraySum) % MOD;
+            // sum = (sum + totalSubarraySum) % MOD;
+            
+            long leftLen = i - nsl[i];
+            long rightLen = nsr[i] - i;
+            long total = leftLen * rightLen * nums[i];
+            sum = (sum + total) % MOD;
         }
 
         return (int)sum;
