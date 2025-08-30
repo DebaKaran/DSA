@@ -1,3 +1,6 @@
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Map;
 import java.util.Stack;
 
 public class ValidParentheses {
@@ -44,4 +47,27 @@ public boolean isValid(String s) {
         return ch == '(' || ch == '{' || ch == '[';
     }
 
+     public boolean isValid1(String s) {
+        Map<Character, Character> bracketMap = Map.of(
+            ')', '(', 
+            '}', '{', 
+            ']', '['
+        );
+        
+        Deque<Character> stack = new ArrayDeque<>();
+        
+        for (char ch : s.toCharArray()) {
+            if (bracketMap.containsValue(ch)) {
+                stack.push(ch);
+            } else if (bracketMap.containsKey(ch)) {
+                if (stack.isEmpty() || stack.pop() != bracketMap.get(ch)) {
+                    return false;
+                }
+            } else {
+                return false; // Optional safeguard
+            }
+        }
+        
+        return stack.isEmpty();
+    }
 }
