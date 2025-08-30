@@ -22,22 +22,14 @@ public class EvaluateReversePolishNotation {
     }
 
     private int getResult(int top1, int top2, String token) {
-        if(token.equals("+")) {
-            return top1 + top2;
-        }
-
-        else if(token.equals("-")) {
-            return top1 - top2;
-        }
-
-        else if(token.equals("*")) {
-            return top1 * top2;
-        }
-
-        else  {
-            return top1 / top2;
-        }
+    switch (token) {
+        case "+": return top1 + top2;
+        case "-": return top1 - top2;
+        case "*": return top1 * top2;
+        default: return top1 / top2;
     }
+}
+
 
     private boolean isOperand(String token) {
         return token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/");
