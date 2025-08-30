@@ -1,17 +1,50 @@
 // LeetCode Problem: 739. Daily Temperatures
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Stack;
 
 public class DailyTemperature {
 public int[] dailyTemperatures(int[] temperatures) {
        //return dailyTemperaturesUsingBruteForce(temperatures);
 
-       return nextGreaterElement(temperatures);
+       //return nextGreaterElementUsingStack(temperatures);
+
+       return nextGreaterElementUsingDeque(temperatures);
     }
 
     // Time Complexity: O(n)
     // Space Complexity: O(n)
-    private int[] nextGreaterElement(int[] temperatures) {
+
+    private int[] nextGreaterElementUsingDeque(int[] temperatures) {
+        int n = temperatures.length;
+        int[] result = new int[n];
+        
+        //srored index
+        Deque<Integer> stack = new ArrayDeque<>();
+
+        for(int i = n - 1; i >= 0; i--) {
+              // Pop until stack top is strictly greater
+        while (!stack.isEmpty() && temperatures[i] >= temperatures[stack.peek()]) {
+            stack.pop();
+        }
+
+        // If stack not empty → next warmer exists
+        if (!stack.isEmpty()) {
+            result[i] = stack.peek() - i;
+        }
+
+        // Push current index
+        stack.push(i);
+        }
+
+        return result;
+    }
+
+
+    // Time Complexity: O(n)
+    // Space Complexity: O(n)
+    private int[] nextGreaterElementUsingStack(int[] temperatures) {
         int n = temperatures.length;
         int[] result = new int[n];
         //srored index
