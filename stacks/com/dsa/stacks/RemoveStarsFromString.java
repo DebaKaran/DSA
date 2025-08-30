@@ -43,4 +43,19 @@ public class RemoveStarsFromString {
 
         return sb.toString();
     }
+
+    public String removeStars1(String s) {
+        char[] arr = s.toCharArray();
+        int k = 0; // write pointer
+
+        for (char ch : arr) {
+            if (ch == '*') {
+                if (k > 0) k--; // undo last written character
+            } else {
+                arr[k++] = ch; // keep valid character
+            }
+        }
+
+        return new String(arr, 0, k); // build result from valid portion
+    }
 }
