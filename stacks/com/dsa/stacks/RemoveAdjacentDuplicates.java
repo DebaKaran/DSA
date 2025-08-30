@@ -1,10 +1,14 @@
-import java.sql.Time;
 import java.util.Stack;
+
+//LeetCode 1047: Remove All Adjacent Duplicates In String
+//https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/description/
 
 public class RemoveAdjacentDuplicates {
     public String removeDuplicates(String s) {
         //Using Stack
-        return removeDuplicateUsingStack(s);
+        //return removeDuplicateUsingStack(s);
+
+        return removeDuplicateUsingStringBuilder(s);
     }
 
 //Time Complexity
@@ -50,6 +54,25 @@ public class RemoveAdjacentDuplicates {
 
         sb.reverse();
 
+        return sb.toString();
+    }
+
+    //Using StringBulder
+    //Time Complexity: O(n): each character is processed once.
+    //Space Complexity: O(n):   in the worst case, the result string can be of size n.
+    private String removeDuplicateUsingStringBuilder(String s) {
+        //Using StringBulder
+       StringBuilder sb = new StringBuilder();
+
+        for(char ch :  s.toCharArray()) {
+            int n = sb.length();
+
+            if(n > 0 && sb.charAt(n - 1) == ch) {
+                sb.deleteCharAt(n - 1);
+            } else {
+                sb.append(ch);
+            }
+        }
         return sb.toString();
     }
 }
