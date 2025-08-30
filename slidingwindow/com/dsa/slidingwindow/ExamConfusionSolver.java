@@ -1,5 +1,7 @@
 package com.dsa.slidingwindow;
 
+//LeetCode Problem: 2024. https://leetcode.com/problems/maximize-the-confusion-of-an-exam/description/
+
 public class ExamConfusionSolver {
     public int maxConsecutiveAnswers(String answerKey, int k) {
         return maxConsecutiveAnswersUsingRecursion(answerKey.toCharArray(), k, 0);
@@ -13,7 +15,7 @@ public class ExamConfusionSolver {
     // and returns the maximum length of consecutive answers that can be achieved with at most k changes
     // Note: This is not an efficient solution for large inputs, but it demonstrates the recursive approach
     // to solve the problem.
-    
+
     private int maxConsecutiveAnswersUsingRecursion(char[] answerKey, int k, int index) {
         //Base case
         if(k == 0 ||index >= answerKey.length) {
