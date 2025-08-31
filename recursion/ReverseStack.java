@@ -2,12 +2,18 @@
 
 //GFG Problem: https://practice.geeksforgeeks.org/problems/reverse-a-stack/1
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 public class ReverseStack {
     static void reverse(Stack<Integer> St) {
         //reverseStackUsingRecursion(St);
-        reverseStackUsingRecursionWithoutExtraStack(St);
+        //reverseStackUsingRecursionWithoutExtraStack(St);
+
+        //Using Tail Recursion
+        List<Integer> helper = new ArrayList<>();
+        reverseUsingTailRecursion(St, helper);
         
     }
     
@@ -72,4 +78,20 @@ public class ReverseStack {
         
         st.push(topElement);
     }
+    // 1: Time Complexity:
+    // O(n) - due to single traversal of stack  
+    // 2: Space Complexity:
+    // O(n) - due to helper list    
+    
+    private static void reverseUsingTailRecursion(Stack<Integer> st, List<Integer> helper) {
+         if(st.isEmpty()) {
+            for(int i = 0; i < helper.size(); i++) {
+                st.push(helper.get(i));
+            }
+            return;
+         }
+         
+         helper.add(st.pop());
+         reverseUsingTailRecursion(st, helper);
+     }
 }
