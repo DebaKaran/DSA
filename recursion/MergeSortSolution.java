@@ -3,14 +3,17 @@ import java.util.Arrays;
 public class MergeSortSolution {
 
     void mergeSort(int arr[], int l, int r) {
-        mergeSortUsingRecursion(arr, l, r);
-        
+        //mergeSortUsingRecursion(arr, l, r);
+
+        // Create one temp buffer array for the entire recursion
+        int[] temp = new int[arr.length];
+        mergeSortUsingRecursion(arr, l, r, temp);
     }
     
     //  1: Time Complexity:
     // O(n log n) - n for merging and log n for dividing the array  
     // 2: Space Complexity:
-    // O(n) - for temporary arrays used in merging process
+    // O(n log n) - for temporary arrays used in merging process
     
     void mergeSortUsingRecursion(int arr[], int l, int r) {
         if(l >= r) {
@@ -55,6 +58,52 @@ public class MergeSortSolution {
             arr[k] = right[j];
             j++;
             k++;
+        }
+    }
+
+    //  1: Time Complexity:
+    // O(n log n) - n for merging and log n for dividing the array
+    // 2: Space Complexity:
+    // O(n) - for temporary array used in merging process
+    
+     void mergeSortUsingRecursion(int[] arr, int l, int r, int[] temp) {
+        if (l >= r) return;  // base case
+
+        int mid = l + (r - l) / 2;
+
+        mergeSortUsingRecursion(arr, l, mid, temp);
+        mergeSortUsingRecursion(arr, mid + 1, r, temp);
+
+        merge(arr, l, r, mid, temp);
+    }
+
+    void merge(int[] arr, int l, int r, int mid, int[] temp) {
+        int i = l;
+        int j = mid + 1;
+        int k = l;
+
+        // Merge into temp
+        while (i <= mid && j <= r) {
+            if (arr[i] <= arr[j]) {
+                temp[k++] = arr[i++];
+            } else {
+                temp[k++] = arr[j++];
+            }
+        }
+
+        // Copy leftovers from left half
+        while (i <= mid) {
+            temp[k++] = arr[i++];
+        }
+
+        // Copy leftovers from right half
+        while (j <= r) {
+            temp[k++] = arr[j++];
+        }
+
+        // Copy sorted range back into original array
+        for (int x = l; x <= r; x++) {
+            arr[x] = temp[x];
         }
     }
 }
