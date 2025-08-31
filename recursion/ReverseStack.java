@@ -6,7 +6,8 @@ import java.util.Stack;
 
 public class ReverseStack {
     static void reverse(Stack<Integer> St) {
-        reverseStackUsingRecursion(St);
+        //reverseStackUsingRecursion(St);
+        reverseStackUsingRecursionWithoutExtraStack(St);
         
     }
     
@@ -14,7 +15,7 @@ public class ReverseStack {
     // O(n^2) - due to insertAtBottom function which takes O(n)
     // 2: Space Complexity:
     // O(n) - due to recursion stack
-    
+
     private static void reverseStackUsingRecursion(Stack<Integer> st) {
         if(st.isEmpty()) {
             return;
@@ -40,5 +41,35 @@ public class ReverseStack {
         while(!tempSt.isEmpty()) {
             st.push(tempSt.pop());
         }
+    }
+
+    // 1: Time Complexity:
+    // O(n^2) - due to insertAtBottom function which takes O(n) 
+    // 2: Space Complexity:
+    // O(n) - due to recursion stack
+    
+    private static void reverseStackUsingRecursionWithoutExtraStack(Stack<Integer> st) {
+        if(st.isEmpty()) {
+            return;
+        }
+        
+        Integer topElement = st.pop();
+        
+        reverseStackUsingRecursionWithoutExtraStack(st);
+        
+        insertAtBottom(st, topElement);
+    }
+    
+    private static void insertAtBottomWithoutExtraStack(Stack<Integer> st, Integer topElement) {
+        
+        if(st.isEmpty()) {
+            st.push(topElement);
+            return;
+        }
+        
+        insertAtBottomWithoutExtraStack(st, st.pop());
+        
+        
+        st.push(topElement);
     }
 }
