@@ -33,7 +33,8 @@ public class SubsequencesSolution {
       subsequences(str, soln, index + 1, sb);
 
       //backtracking
-      sb.deleteCharAt(sb.length() - 1);
+      //sb.deleteCharAt(sb.length() - 1);
+      sb.setLength(sb.length() - 1);  // O(1) improvement
       subsequences(str, soln, index + 1, sb);
 
    }
