@@ -10,7 +10,7 @@ public class PerfectSumSubsequences {
        int n = nums.length;
         //return perfectSum(nums, target, n - 1);
       
-        int[][] memos = new int[target + 1][n];
+        int[][] memos = new int[n][target + 1];
         for(int[] memo : memos) {
             Arrays.fill(memo, -1);
         }
@@ -28,8 +28,8 @@ public class PerfectSumSubsequences {
         if(idx < 0) return target == 0 ? 1 : 0;  // base condition
         
          // Already computed?
-        if(memos[target][idx] != -1) {
-            return memos[target][idx];
+        if(memos[idx][target] != -1) {
+            return memos[target][target];
         }
         
         // Option 1: Include current number (if ≤ target)
@@ -39,7 +39,7 @@ public class PerfectSumSubsequences {
          int excluded = perfectSumUsingMemo(nums, target, idx - 1, memos);
         
         // Save & return
-        return memos[target][idx] = included + excluded;
+        return memos[idx][target] = included + excluded;
     }
     
     //Time Complexity: O(2^n)
