@@ -19,6 +19,40 @@ public class PerfectSumSubsequences {
         
     }
     
+    //From Base case
+    
+    //not working 
+    private int perfectSumUsingBottomUp(int[] nums, int target) {
+        int n = nums.length;
+        
+        int[][] dp = new int[n][target + 1];
+        
+        //when current target is zero, it (excluding case) will always return 1
+        //There is always 1 subset (empty subset) that makes sum = 0.
+        for(int i = 0; i < n; i++) {
+            dp[i][0] = 1;
+        }
+        
+        // Base case 2: index = 0 → only nums[0] can form sum
+        if (nums[0] <= target) {
+            dp[0][nums[0]] = 1;
+        }
+
+        for(int idx = 1; idx < n; idx++) {
+            for(int tgt = 1; tgt <= target; tgt++) {
+                
+                int excluded = dp[idx - 1][tgt];
+                int included = 0;
+                if(tgt >= nums[idx]) {
+                    included = dp[idx - 1][tgt - nums[idx]];
+                }
+                dp[idx][tgt] = excluded + included;
+            }
+        }
+        return dp[n - 1][target];
+    }
+   
+    
     //Time Complexity: O(n * target)
     //Space Complexity: O(n * target) for the memoization table + O(n)
     
