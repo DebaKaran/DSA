@@ -7,14 +7,15 @@ public class PerfectSumSubsequences {
 
     // Function to calculate the number of subsets with a given sum
     public int perfectSum(int[] nums, int target) {
-        //return perfectSum(nums, target, 0);
-
-        int[][] memos = new int[target + 1][nums.length];
+       int n = nums.length;
+        //return perfectSum(nums, target, n - 1);
+      
+        int[][] memos = new int[target + 1][n];
         for(int[] memo : memos) {
             Arrays.fill(memo, -1);
         }
         
-        return perfectSumUsingMemo(nums, target, 0, memos);
+        return perfectSumUsingMemo(nums, target, n - 1, memos);
         
     }
     
@@ -22,10 +23,9 @@ public class PerfectSumSubsequences {
     //Space Complexity: O(n * target) for the memoization table + O(n)
     
     private int perfectSumUsingMemo(int[] nums, int target, int idx, int[][] memos) {
-         // Base case
-        if(idx >= nums.length) {
-            return target == 0 ? 1 : 0;
-        }
+        if(target < 0) return 0;  // pruning, no valid subset if target went negative
+        
+        if(idx < 0) return target == 0 ? 1 : 0;  // base condition
         
          // Already computed?
         if(memos[target][idx] != -1) {
@@ -33,13 +33,10 @@ public class PerfectSumSubsequences {
         }
         
         // Option 1: Include current number (if ≤ target)
-        int included = 0;
-        if(nums[idx] <= target) {
-            included = perfectSumUsingMemo(nums, target - nums[idx], idx + 1, memos);
-        }
+        int included = perfectSumUsingMemo(nums, target - nums[idx], idx - 1, memos);
         
         // Option 2: Exclude current number
-        int excluded = perfectSumUsingMemo(nums, target, idx + 1, memos);
+         int excluded = perfectSumUsingMemo(nums, target, idx - 1, memos);
         
         // Save & return
         return memos[target][idx] = included + excluded;
@@ -50,16 +47,13 @@ public class PerfectSumSubsequences {
     //TLE for large inputs
 
     private int perfectSum(int[] nums, int target, int idx) {
-        if (idx >= nums.length) {
-            return target == 0 ? 1 : 0;
-        }
+       if(target < 0) return 0;  // pruning, no valid subset if target went negative
         
-        int included = 0;
-        if (nums[idx] <= target) {
-            included = perfectSum(nums, target - nums[idx], idx + 1);
-        }
+        if(idx < 0) return target == 0 ? 1 : 0;  // base condition
         
-        int excluded = perfectSum(nums, target, idx + 1);
+        int included = perfectSum(nums, target - nums[idx], idx - 1);
+        
+        int excluded = perfectSum(nums, target, idx - 1);
         
         return included + excluded;
     }
