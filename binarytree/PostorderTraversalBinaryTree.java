@@ -6,8 +6,40 @@ import java.util.Stack;
 
 public class PostorderTraversalBinaryTree {
     public List<Integer> postorderTraversal(TreeNode root) {
-        List<Integer> result = new ArrayList<>();
+        /**List<Integer> result = new ArrayList<>();
         postorderTraversal(root, result);
+        return result; */
+        //return postOrderUsingTwoStack(root);
+        return postOrderUsingOneStack(root);
+	}
+	
+    private static List<Integer> postOrderUsingOneStack(TreeNode node) {
+        List<Integer> result = new ArrayList<>();
+        if (node == null) return result;
+        
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode current = node;
+        TreeNode lastVisited = null;
+
+        while(current != null || !stack.isEmpty()) {
+            // Step 1: Push all left nodes
+            while(current != null) {
+                stack.push(current);
+                current = current.left;
+            }
+
+            // Step 2: Peek the top node
+            TreeNode topNode = stack.peek();
+
+            // Step 3: Check if the right child exists and is unvisited
+            if(topNode.right != null && topNode.right != lastVisited) {
+                current = topNode.right;
+            } else {
+                // Step 4: Process the node
+                result.add(topNode.val);
+                lastVisited = stack.pop();
+            }
+        }
         return result;
     }
 
