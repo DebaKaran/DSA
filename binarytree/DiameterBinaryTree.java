@@ -18,10 +18,30 @@ public class DiameterBinaryTree {
        
         //return maxDiameter(root);
         
-        heighForDia(root);
-        return diameter;
+        /**heighForDia(root);
+        return diameter; */
+
+        int[] res = new int[1]; // res[0] holds diameter
+        heighForDia2(root, res);
+        return res[0];
     }
     
+    private int heighForDia2(TreeNode node, int[] diameter) {
+        if(node == null) {
+            return 0;
+        }
+        
+        // Recursively compute height of left and right subtrees
+        int lh = heighForDia(node.left);
+        int rh = heighForDia(node.right);
+        
+        // Update diameter if longest path passes through this node
+        diameter[0] = Math.max(diameter[0], lh + rh);
+        
+        // Return height of current node
+        return Math.max(lh, rh) + 1;
+    } 
+
     //Time Complexity: O(n)
     //Space Complexity: O(h) where h is the height of the tree
     //Function to calculate height of tree and update diameter
