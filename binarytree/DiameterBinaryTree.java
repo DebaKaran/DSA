@@ -27,21 +27,17 @@ public class DiameterBinaryTree {
             return 0;
         }
         
-        int dia = 0;
-        
         int lh = height(node.left);
         int rh = height(node.right);
         
-        int viaNode = lh + rh;
-        
-        dia = Math.max(dia, viaNode);
+        int currentDia = lh + rh;
         
         int leftDia = maxDiameter(node.left);
         int rightDia = maxDiameter(node.right);
         
         int leftOrRightDia = Math.max(leftDia, rightDia);
         
-        return Math.max(dia, leftOrRightDia);
+        return Math.max(currentDia, leftOrRightDia);
     }
     
     private int height(TreeNode node) {
