@@ -1,7 +1,5 @@
 package binarytree;
 
-import org.w3c.dom.Node;
-
 /**
  * Diameter of a Binary Tree
  * 
@@ -16,7 +14,7 @@ public class DiameterBinaryTree {
     // Wrapper to store result during recursion
     private int diameter = 0;
     
-    int diameter(Node root) {
+    int diameter(TreeNode root) {
        
         //return maxDiameter(root);
         
@@ -28,7 +26,7 @@ public class DiameterBinaryTree {
     //Space Complexity: O(h) where h is the height of the tree
     //Function to calculate height of tree and update diameter
     // Returns height of subtree rooted at 'node'
-    private int heighForDia(Node node) {
+    private int heighForDia(TreeNode node) {
         if(node == null) {
             return 0;
         }
