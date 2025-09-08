@@ -3,7 +3,11 @@ package binarytree;
 import java.util.ArrayList;
 import java.util.Stack;
 
+//GFG Problem: https://practice.geeksforgeeks.org/problems/boundary-traversal-of-binary-tree/1
+//LeetCode Problem: https://leetcode.com/problems/boundary-of-binary-tree/
 public class BoundaryTraversalBT {
+
+    //Time: O(N) Space: O(H) H = height of tree
 
     public ArrayList<Integer> boundaryTraversal(TreeNode node) {
         ArrayList<Integer> result = new ArrayList<Integer>();
