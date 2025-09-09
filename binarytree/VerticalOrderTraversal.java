@@ -1,6 +1,7 @@
 package binarytree;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,12 +12,55 @@ import java.util.TreeMap;
 
 public class VerticalOrderTraversal {
 
+//Time Complexity: O(N log N) where N is the number of nodes in the tree
+//(collect in O(n), sort O(n log n), grouping O(n))
+//Space Complexity: O(N) for the storage of nodes
+//(list to store nodes O(n), recursion stack O(h) where h is the height of the tree)
+public List<List<Integer>> verticalTraversal(TreeNode root) {
+    List<int[]> nodes = new ArrayList<>(); // {col, row, val}
+
+    //Using DFS 
+    dfs(root, 0, 0, nodes);
+
+    // Sort by col, then row, then val
+    Collections.sort(nodes, (a, b) -> {
+        if(a[0] != b[0]) return a[0] - b[0]; //col
+        if(a[1] != b[1]) return a[1] - b[1]; //row
+        return a[2] - b[2];
+    });
+
+    List<List<Integer>> result = new ArrayList<>();
+    int prevCol = Integer.MIN_VALUE;
+
+    for(int[] node : nodes) {
+        if(node[0] != prevCol) {
+            result.add(new ArrayList<>());
+            prevCol = node[0];
+        }
+
+        result.get(result.size() - 1).add(node[2]);
+    }
+
+    return result;
+}
+
+private void dfs(TreeNode node, int row, int col, List<int[]> nodes) {
+    if(node == null) {
+        return;
+    }
+
+    nodes.add(new int[]{col, row, node.val});
+    dfs(node.left, row + 1, col - 1, nodes);
+    dfs(node.right, row + 1, col + 1, nodes);
+}
+
+
 //Let N = number of nodes in the tree
 
 //Step 1: BFS traversal
  // We visit each node exactly once.
  // Work per node = O(1) (insertion into map).
- // ✅ Time = O(N)
+ // Time = O(N)
 
  // Step 2: Sorting inside each column
 
@@ -43,7 +87,7 @@ public class VerticalOrderTraversal {
     // Result list → O(N)
 
     // Total Space = O(N)
-    public List<List<Integer>> verticalTraversal(TreeNode root) {
+    public List<List<Integer>> verticalTraversal1(TreeNode root) {
         List<List<Integer>> result = new ArrayList<>();
         if(root == null) return result;
         //Key is the vertical position
