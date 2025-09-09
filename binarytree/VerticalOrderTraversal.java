@@ -48,13 +48,13 @@ public class VerticalOrderTraversal {
         if(root == null) return result;
         //Key is the vertical position
         Map<Integer, List<int[]>> map = new TreeMap<>();
-        Pair rootPair = new Pair(root, 0, 0);
+        Tuple rootPair = new Tuple(root, 0, 0);
 
-        Queue<Pair> queue = new LinkedList<>();
+        Queue<Tuple> queue = new LinkedList<>();
         queue.add(rootPair);
 
         while(!queue.isEmpty()) {
-            Pair topPair = queue.remove();
+            Tuple topPair = queue.remove();
             TreeNode temp = topPair.node;
             List<int[]> ds = map.get(topPair.col);
 
@@ -65,11 +65,11 @@ public class VerticalOrderTraversal {
             ds.add(new int[] { topPair.row, temp.val});
 
             if(temp.left != null) {
-                queue.add(new Pair(temp.left, topPair.row + 1, topPair.col - 1));
+                queue.add(new Tuple(temp.left, topPair.row + 1, topPair.col - 1));
             }
 
             if(temp.right != null) {
-                queue.add(new Pair(temp.right, topPair.row + 1, topPair.col + 1));
+                queue.add(new Tuple(temp.right, topPair.row + 1, topPair.col + 1));
             }
 
             map.put(topPair.col, ds);
@@ -91,12 +91,12 @@ public class VerticalOrderTraversal {
         return result;
     }
 
-    class Pair {
+    class Tuple {
         TreeNode node;
         int row;
         int col;
 
-        public Pair(TreeNode node, int row, int col) {
+        public Tuple(TreeNode node, int row, int col) {
             this.node = node;
             this.row = row;
             this.col = col;
