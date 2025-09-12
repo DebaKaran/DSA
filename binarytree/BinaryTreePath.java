@@ -40,8 +40,42 @@ public class BinaryTreePath {
 
     public List<String> binaryTreePaths(TreeNode root) {
         List<String> result = new ArrayList<>();
-        dfs(root, new ArrayList<>(), result);
+        //dfs(root, new ArrayList<>(), result);
+        dfs1(root, "", result);
+
         return result;
+    }
+
+     // Time Complexity
+
+    // Each node is still visited once → O(n) for traversal.
+
+    // At each recursive call, you create a new string (path + node.val + "->").
+
+    // String concatenation is O(k) where k = current path length.
+
+    // Over the recursion tree, this also gives O(L * h) total.
+
+    // Total Time = O(n * h) (same as list approach).
+
+    // 2: Space Complexity
+
+    // Recursion stack: O(h).
+
+    // Intermediate strings: each recursive call creates a copy of the path string, up to O(h) per path.
+
+    // Result storage: O(L * h) for final strings.
+
+    // Overall: O(h + L * h).
+    private void dfs1(TreeNode node, String path, List<String> result) {
+        if(node == null) return;
+
+        if(node.left == null && node.right == null) {
+            result.add(path + node.val);
+        } else {
+            dfs1(node.left, path  + node.val + "->", result);
+            dfs1(node.right, path + node.val + "->", result);
+        }
     }
 
     private void dfs(TreeNode node, List<Integer> path, List<String> result) {
