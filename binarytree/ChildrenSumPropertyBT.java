@@ -8,28 +8,21 @@ public class ChildrenSumPropertyBT {
         return isSumPropertyBT(root);
         
     }
+    
     //O(n) time and O(h) space
     
     private boolean isSumPropertyBT(TreeNode curr) {
-        if(curr == null) {
-            return true;
-        }
-        
-        if(curr.left == null && curr.right == null) {
+        // Base case: null or leaf node
+        if(curr == null || (curr.left == null && curr.right == null)) {
             return true;
         }
         
         int leftVal = curr.left != null ? curr.left.val : 0;
         int rightVal = curr.right != null ? curr.right.val : 0;
         
-        if(curr.val != (leftVal + rightVal)) {
-            return false;
-        }
-        
-        if(!isSumPropertyBT(curr.left) || !isSumPropertyBT(curr.right)) {
-            return false;
-        }
-        
-        return true;
+         // Current node check + recursive checks
+        return (curr.val == leftVal + rightVal) 
+                && isSumPropertyBT(curr.left) 
+                && isSumPropertyBT(curr.right);
     }
 }
