@@ -1,6 +1,5 @@
 package binarytree;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +9,26 @@ import java.util.List;
 public class LowestCommonAncestorBT {
 
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        return findLca(root, p, q);
+        //return findLca(root, p, q);
+        
+        return lca(root, p, q);
+    }
+
+    //Optimal Approach: Single Traversal
+    //Time Complexity: O(n)
+    //Space Complexity: O(h) where h is the height of the tree
+    private TreeNode lca(TreeNode curr, TreeNode p, TreeNode q) {
+        if(curr == null || p == curr || q == curr) {
+            return curr;
+        }
+
+        TreeNode left = lca(curr.left, p, q);
+        TreeNode right = lca(curr.right, p, q);
+
+        if(left != null && right != null) return curr;
+
+        return left != null ? left : right;
+        
     }
 
    //1: Time Complexity
