@@ -1,5 +1,6 @@
 package binarytree;
 
+import java.sql.Time;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -8,6 +9,26 @@ import java.util.Queue;
 import java.util.Set;
 
 public class InfectionTimeInBinaryTree {
+
+    // 1: Time Complexity
+
+    // findParentNode(root) → BFS through all nodes → O(n)
+
+    // findTargetNode(start, root) → BFS through all nodes (in worst case) → O(n)
+
+    // Main BFS (infection spread) → Visits each node once → O(n)
+
+    // Total Time Complexity = O(n)
+
+    // Space Complexity
+
+    // Parent map → stores up to n entries → O(n)
+
+    // Visited set → stores up to n nodes → O(n)
+
+    // Queue → in worst case stores ~n/2 nodes (a level in BFS) → O(n)
+
+    // Total Space Complexity = O(n)
     public int amountOfTime(TreeNode root, int start) {
         int time = 0;
 
