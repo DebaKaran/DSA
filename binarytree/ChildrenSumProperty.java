@@ -57,11 +57,12 @@ public class ChildrenSumProperty {
         if(node.val <= childrenSum) {
             node.val = childrenSum;
         } else {
+             // propagate root value downwards
             int diff = node.val - childrenSum;
             if(node.left != null) {
                 node.left.val = node.left.val + diff;
                 convertToChildrenSum(node.left);
-            } else {
+            } else if(node.right != null){
                 node.right.val = node.right.val + diff;
                 convertToChildrenSum(node.right);
             }
