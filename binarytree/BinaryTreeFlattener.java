@@ -3,10 +3,42 @@ package binarytree;
 import java.sql.Time;
 
 public class BinaryTreeFlattener {
+
+    TreeNode prev = null; // keeps track of already flattened part
+    
+
     public void flatten(TreeNode root) {
+        
         //flattenRecursive(root);
-        flattenAndReturnTail(root);
+        //flattenAndReturnTail(root);
+        flattenBT(root);
     }
+
+    // 1: Time Complexity:
+
+    // Each node is visited exactly once → O(n).
+
+    // 2: Space Complexity:
+
+    // Only recursion stack is used → O(h), where h = tree height.
+
+    // Worst case (skewed tree): O(n). Balanced: O(log n).
+    
+    private void flattenBT(TreeNode node) {
+        if(node == null) return;
+
+        // Step 1: recurse on right first
+        flattenBT(node.right);
+
+        // Step 2: recurse on left
+        flattenBT(node.left);
+
+        // Step 3: rewire current node
+        node.right = prev; // connect to previously processed head
+        node.left = null; // clear left pointer
+        prev = node; // update prev to current node
+    }
+
 
     // 1: Time Complexity:
 
