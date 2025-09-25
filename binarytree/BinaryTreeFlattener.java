@@ -1,6 +1,7 @@
 package binarytree;
 
 import java.sql.Time;
+import java.util.Stack;
 
 public class BinaryTreeFlattener {
 
@@ -11,7 +12,50 @@ public class BinaryTreeFlattener {
         
         //flattenRecursive(root);
         //flattenAndReturnTail(root);
-        flattenBT(root);
+        //flattenBT(root);
+
+        flattenBTUsingIterative(root);
+    }
+    
+    //1: Time Complexity:
+
+    // Each node is pushed and popped from the stack exactly once → O(n).
+
+    //2: Space Complexity:
+
+    // In the worst case (skewed tree), the stack holds O(n) nodes.
+
+    // In a balanced tree, the stack height is proportional to O(log n).
+
+    // So worst case: O(n).
+
+    private void flattenBTUsingIterative(TreeNode node) {
+        if (node == null) return;
+
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(node);  // start with root
+
+        while (!stack.isEmpty()) {
+            TreeNode curr = stack.pop();
+
+            // Push right child first (so left is processed before right, matching preorder)
+            if (curr.right != null) {
+                stack.push(curr.right);
+            }
+
+            // Push left child
+            if (curr.left != null) {
+                stack.push(curr.left);
+            }
+
+            // If stack is not empty, link current node's right to the next node in preorder
+            if (!stack.isEmpty()) {
+                curr.right = stack.peek();
+            }
+
+            // Always nullify the left pointer to follow linked list structure
+            curr.left = null;
+        }
     }
 
     // 1: Time Complexity:
@@ -23,7 +67,7 @@ public class BinaryTreeFlattener {
     // Only recursion stack is used → O(h), where h = tree height.
 
     // Worst case (skewed tree): O(n). Balanced: O(log n).
-    
+
     private void flattenBT(TreeNode node) {
         if(node == null) return;
 
