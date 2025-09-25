@@ -1,9 +1,56 @@
 package binarytree;
 
+import java.sql.Time;
 
 public class BinaryTreeFlattener {
     public void flatten(TreeNode root) {
-        flattenRecursive(root);
+        //flattenRecursive(root);
+        flattenAndReturnTail(root);
+    }
+
+    // 1: Time Complexity:
+
+    // Each node is visited once.
+
+    // No repeated scanning for tails (tail is returned directly).
+
+    // O(n) overall.
+
+    // 2: Space Complexity:
+
+    // No extra data structures, just recursion stack.
+
+    // O(h), where h = height of the tree.
+
+    // Worst case skewed tree: O(n).
+
+    // Balanced tree: O(log n).
+
+    // Helper: flattens the subtree and returns the tail of the flattened list
+    private TreeNode flattenAndReturnTail(TreeNode node) {
+        if(node == null) {
+            return node;
+        }
+
+        // Leaf node → tail is itself
+        if(node.left == null && node.right == null) {
+            return node;
+        }
+
+        // Flatten left and right subtrees
+        TreeNode leftTail =  flattenAndReturnTail(node.left);
+        TreeNode rightTail =  flattenAndReturnTail(node.right);
+
+        // If left subtree exists, stitch it between node and right subtree
+        if(leftTail != null) {
+            leftTail.right = node.right; // attach right list after leftTail
+            node.right = node.left; // move left list to right
+            node.left = null;              // nullify left pointer
+        }
+
+        // Return the correct tail
+        return rightTail != null ? rightTail : leftTail;
+        
     }
 
     
