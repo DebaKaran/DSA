@@ -1,6 +1,5 @@
 package binarytree;
 
-import java.sql.Time;
 
 public class BinaryTreeFlattener {
     public void flatten(TreeNode root) {
@@ -26,7 +25,7 @@ public class BinaryTreeFlattener {
     // Worst case (skewed tree): O(n).
 
     // Best/average (balanced tree): O(log n).
-    
+
     private void flattenRecursive(TreeNode node) {
         if(node == null) {
             return;
