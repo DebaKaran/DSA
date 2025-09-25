@@ -14,9 +14,38 @@ public class BinaryTreeFlattener {
         //flattenAndReturnTail(root);
         //flattenBT(root);
 
-        flattenBTUsingIterative(root);
+        //flattenBTUsingIterative(root);
+        flattenBTUsingMorrisTraversal(root);
     }
-    
+
+    // Morris-style flatten binary tree to linked list
+    // Time: O(n) → each edge is visited at most twice (once going down, once stitching).
+
+    // Space: O(1) → no recursion, no explicit stack.
+    private void flattenBTUsingMorrisTraversal(TreeNode node) {
+        TreeNode curr = node;
+
+        while (curr != null) {
+            if (curr.left != null) {
+                // Find the rightmost node in left subtree
+                TreeNode pre = curr.left;
+                while (pre.right != null) {
+                    pre = pre.right;
+                }
+
+                // Stitch original right subtree after rightmost node
+                pre.right = curr.right;
+
+                // Shift left subtree to right
+                curr.right = curr.left;
+                curr.left = null;
+            }
+
+            // Move always right (like Morris traversal)
+            curr = curr.right;
+        }
+    }
+
     //1: Time Complexity:
 
     // Each node is pushed and popped from the stack exactly once → O(n).
