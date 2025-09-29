@@ -1,8 +1,6 @@
 
 //LeetCode Problem 125: Valid Palindrome
 
-import java.sql.Time;
-
 public class ValidPalindrome {
     // 1: Time Complexity: O(n)
 
