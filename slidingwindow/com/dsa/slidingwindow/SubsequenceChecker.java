@@ -8,8 +8,32 @@ public class SubsequenceChecker {
             return true;
         }
 
-        return isSubsequenceHelper(s, t);
+        //return isSubsequenceHelper(s, t);
+        return isSubsequenceUsingTwoPointer(s, t);
+    }
+    
+    // Time Complexity: O(|t|), since we scan through t at most once.
+
+    // Space Complexity: O(1).
+    private boolean isSubsequenceUsingTwoPointer(String s, String t) {
+        int n = s.length();
+        int m = t.length();
         
+        if(m < n) return false;
+
+        //s is a subsequence of t
+        int i = 0; //for s
+        int j = 0; //for t
+
+       while(i < n && j < m) {
+          if(s.charAt(i) == t.charAt(j)) {
+            i++;
+          }
+          j++;
+       }
+
+       return i == s.length();
+
     }
 
     // 1: Time Complexity
@@ -27,7 +51,7 @@ public class SubsequenceChecker {
     // Uses a few variables (i, j, flag) and no extra data structures.
 
     // Space Complexity: O(1)
-    
+
     private boolean isSubsequenceHelper(String s, String t) {
 
        int j = 0;
