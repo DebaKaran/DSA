@@ -1,7 +1,5 @@
 //Leetcode Problem Link: https://leetcode.com/problems/is-subsequence/
 
-import java.sql.Time;
-
 public class SubsequenceChecker {
      public boolean isSubsequence(String s, String t) {
         if (s == null || s.length() == 0) {
@@ -11,7 +9,7 @@ public class SubsequenceChecker {
         //return isSubsequenceHelper(s, t);
         return isSubsequenceUsingTwoPointer(s, t);
     }
-    
+
     // Time Complexity: O(|t|), since we scan through t at most once.
 
     // Space Complexity: O(1).
