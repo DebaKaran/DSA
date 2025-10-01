@@ -1,4 +1,3 @@
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class Permuta {
 
     // Result storage: O(n · n!)
     // Space = O(n · n!)
-    
+
     private void permute(int[] nums, boolean[] visited, List<Integer> ds, List<List<Integer>> result) {
         // Base case: if current permutation is complete
         if (ds.size() == nums.length) {
