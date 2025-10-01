@@ -1,4 +1,3 @@
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +32,7 @@ public class Permuta {
     // Result storage: O(n × n!) (all permutations stored).
 
     // No extra visited[] is used like the previous approach; swaps are in-place.
-    
+
     private void permute(int[] nums, int idx, List<List<Integer>> result) {
 
         // Base case: if we reach the end of the array, convert nums[] into a list
