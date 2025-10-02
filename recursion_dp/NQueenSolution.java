@@ -117,7 +117,13 @@ public class NQueenSolution {
 
         return result;
     }
+    // Time Complexity: O(N!)
 
+    // Each column places a queen in N possible rows, recursive depth = N → factorial growth.
+
+    // Space Complexity: O(N²) for board + O(N) for rowsOccupied + O(2N-1) for each diagonal array → overall O(N²).
+
+    // Recursion stack depth = N → O(N) additional space.
     private void solveNQueens(int col, int n, boolean[] rowsOccupied,
                               boolean[] mainDiagonal, boolean[] antiDiagonal,
                               char[][] board, List<List<String>> result) {
