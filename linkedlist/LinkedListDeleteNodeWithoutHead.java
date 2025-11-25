@@ -14,37 +14,70 @@
  * Space Complexity: O(1) as we are using constant space.
  * 
  */
-class LinkedListDeleteNodeWithoutHead {
+public class LinkedListDeleteNodeWithoutHead {
 
     public void deleteNode(ListNode node) {
 
-        // prev will track the node just before curr
+        // Best approach (O(1)):
+        // Deletes the node by copying the next node's value
+        // and skipping the next node.
+        deleteNodeUsingNextCopy(node);
+
+        // Alternative approach (O(n)):
+        // Shifts values forward until reaching the tail.
+        // deleteNodeByShiftingValues(node);
+    }
+
+    /**
+     * O(1) deletion by copying only the next node's value.
+     * This is the official LeetCode 237 approach.
+     *
+     * Logic:
+     * - Copy value from node.next into current node
+     * - Bypass node.next so the "next node" is effectively deleted
+     *
+     * Constraints:
+     * - LeetCode guarantees node is NOT the tail, so node.next != null
+     */
+    private void deleteNodeUsingNextCopy(ListNode node) {
+        // Copy next node's value into current node
+        node.val = node.next.val;
+
+        // Remove next node by skipping it
+        node.next = node.next.next;
+    }
+
+    /**
+     * O(n) deletion by shifting values from all following nodes.
+     * This works but is less efficient than the O(1) version.
+     *
+     * Logic:
+     * - Copy next node's value into current node
+     * - Move to next node
+     * - Repeat until reaching the tail
+     * - Remove the final duplicate tail node
+     */
+    private void deleteNodeByShiftingValues(ListNode node) {
+
+        // prev holds the node before curr
         ListNode prev = null;
 
         // curr starts at the node we want to "delete"
-        // but since we don't have the previous pointer,
-        // we shift values left until the tail.
         ListNode curr = node;
 
-        // Move through the list until curr reaches the last node.
-        // At each step:
-        // - Copy value of next node into current node
-        // - Move forward
+        // Iterate until curr reaches the last node
         while (curr.next != null) {
             prev = curr;
 
-            // Copy next node's value into current node
+            // Shift next node's value into curr
             curr.val = curr.next.val;
 
-            // Move to next node
+            // Move forward in list
             curr = curr.next;
         }
 
-        // Now curr is at the LAST node.
-        // prev is the second last node.
-        // Remove the tail by disconnecting it.
-        prev.next = null;   // tail removed
-
-        // Node deletion complete (effectively removed 'node')
+        // Now 'curr' is the last node. Remove it.
+        prev.next = null;
     }
 }
+
