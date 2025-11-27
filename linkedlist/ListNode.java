@@ -17,8 +17,51 @@ class ListNode {
 class LinkedListRemoveElementsByValue {
 
     public ListNode removeElements(ListNode head, int val) {
-        return removeElementsBasic(head, val);
+        //return removeElementsBasic(head, val);
+
+        return removeElementsUsingDummyNode(head, val);
         
+    }
+
+    // Approach using a dummy (sentinel) node
+    // Time Complexity: O(N) where N is the number of nodes in the linked list
+    // Space Complexity: O(1) as we are using constant extra space
+    
+    private ListNode removeElementsUsingDummyNode(ListNode head, int val) {
+        // Dummy (sentinel) node before the actual head.
+        // This makes deletions at the head position easier and uniform.
+        ListNode dummy = new ListNode(0, head);
+
+        // prev always points to the node *before* curr
+        ListNode prev = dummy;
+
+        // curr is the node we are currently inspecting
+        ListNode curr = head;
+
+        // Traverse the list
+        while (curr != null) {
+
+            if (curr.val == val) {
+                // Node needs to be removed:
+                // skip curr by linking prev to curr.next
+                prev.next = curr.next;
+
+                // Optional: detach curr for clarity / GC
+                curr.next = null;
+
+                // Move curr forward, prev stays where it is
+                curr = prev.next;
+
+            } else {
+                // Node should be kept:
+                // move both prev and curr forward
+                prev = curr;
+                curr = curr.next;
+            }
+        }
+
+        // New head might have changed, return dummy.next
+        return dummy.next;
     }
 
     // Basic approach without using a dummy node
