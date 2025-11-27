@@ -17,7 +17,7 @@ public class LinkedListInsertAtFront {
     // Create a new node and make it the new head
     // Update the next of the new node to point to the old head
     // Return the new head
-    //1110 test cases passed out of 1115
+    //all test cases passed 
     private Node insertAtFrontBasic(Node head, int x) {
         // Create a new node with the given value
         Node node = new Node(x);
