@@ -13,7 +13,7 @@ public class DoublyLinkedListDeleteLast {
      * Deletes the last node of a doubly linked list
      * and returns the head of the updated list.
      */
-    public static Node deleteLastNode(Node head) {
+    /**public static Node deleteLastNode(Node head) {
 
         // If the list is empty, nothing to delete
         if (head == null) {
@@ -48,5 +48,34 @@ public class DoublyLinkedListDeleteLast {
         // If prevNode is null, the list had only one node
         // Deleting the last node results in an empty list
         return null;
+    } */
+
+        public static Node deleteLastNode(Node head) {
+
+        // If the list is empty OR has only one node,
+        // deleting the last node results in an empty list
+        if (head == null || head.next == null) {
+            return null;
+        }
+
+        // Traverse to the last node (tail) of the list
+        Node curr = head;
+
+        while (curr.next != null) {
+            curr = curr.next;
+        }
+
+        // At this point, curr is the tail node
+        // Use the prev pointer of DLL to get the second-last node
+        Node prev = curr.prev;
+
+        // Break the forward link from the second-last node
+        prev.next = null;
+
+        // Break the backward link from the deleted tail node
+        curr.prev = null;
+
+        // Head remains unchanged after deletion
+        return head;
     }
 }
