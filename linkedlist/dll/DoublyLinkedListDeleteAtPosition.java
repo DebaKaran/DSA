@@ -17,8 +17,58 @@ public class DoublyLinkedListDeleteAtPosition {
     }
 
     // Delegate actual deletion logic to helper method
-    return deleteNodeWithDummyNode(head, pos);
+    //return deleteNodeWithDummyNode(head, pos);
+
+    return deleteNodeWithoutDummyNode(head, pos);
 }
+
+private static Node deleteNodeWithoutDummyNode(Node head, int pos) {
+
+         // Case 1: delete the head (position 0)
+        if (pos == 0) {
+            Node newHead = head.next;
+            if (newHead != null) {
+                newHead.prev = null;
+            }
+            head.next = null;   // detach old head
+            return newHead;
+        }
+
+        // Case 2: delete a non-head node
+        int i = 0;
+
+        // Start traversal from the actual head
+        Node curr = head;
+
+        // Move curr to the node at index `pos`, if it exists
+        while (curr != null && i < pos) {
+            curr = curr.next;
+            i++;
+        }
+
+        // If curr is null, position is out of range ? no deletion
+        if (curr == null) {
+            return head;
+        }
+
+        Node prevNode = curr.prev;
+        Node nextNode = curr.next;
+
+        // Link prevNode to nextNode, skipping curr
+        if (prevNode != null) {
+            prevNode.next = nextNode;
+        }
+
+        if (nextNode != null) {
+            nextNode.prev = prevNode;
+        }
+
+        // Fully detach the deleted node
+        curr.prev = null;
+        curr.next = null;
+
+        return head;
+    }
 
 //Time Complexity: O(N) where N is the number of nodes in the doubly linked list.
 //Space Complexity: O(1) as we are using only constant extra space.
