@@ -11,7 +11,51 @@ public class DoublyLinkedListReverse {
         if (head == null) return head;
 
         // Reverse using a stack of node values
-        return reverseDLLUsingStack(head);
+        //return reverseDLLUsingStack(head);
+
+        return reverseDLLBySwappingLinks(head);
+    }
+
+     /**
+     * Reverses a doubly linked list in-place by swapping
+     * the prev and next pointers of each node.
+     *
+     * Returns the new head of the reversed list.
+     * 
+     * Time Complexity: O(n), Space Complexity: O(1)
+     */
+    private ListNode reverseDLLBySwappingLinks(ListNode head) {
+
+        // If the list is empty or has one node, no change needed
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode curr = head;
+        ListNode newHead = null;   // will store the new head after reversal
+
+        // Traverse the list and swap prev/next for each node
+        while (curr != null) {
+
+            // Store original next before we overwrite it
+            ListNode nextNode = curr.next;
+
+            // Swap the next and prev pointers of the current node
+            curr.next = curr.prev;
+            curr.prev = nextNode;
+
+            // Update newHead to the current node; after the loop,
+            // this will be the last non-null node processed
+            newHead = curr;
+
+            // Move to the original next node (now stored in nextNode)
+            curr = nextNode;
+        }
+
+        // newHead now points to the original tail, which is the
+        // head of the reversed list. Its prev is already correct (null),
+        // and the rest of the links have been flipped.
+        return newHead;
     }
 
     /**
