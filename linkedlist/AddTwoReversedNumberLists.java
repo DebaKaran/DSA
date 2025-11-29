@@ -6,13 +6,42 @@
 public class AddTwoReversedNumberLists {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         //without dummy node
-        return addTwoNumbersWithoutDummyNode(l1, l2);
+        //return addTwoNumbersWithoutDummyNode(l1, l2);
+
+        //with dummy node
+        return addTwoNumbersWithDummyNode(l1, l2);
     }
 
+    private ListNode addTwoNumbersWithDummyNode(ListNode curr1, ListNode curr2) {
+        
+         // Dummy node to simplify list construction.
+        // 'tail' will be the moving tail; 'head' will always point to the dummy.
+
+        ListNode dummy = new ListNode(0);
+        ListNode tail = dummy;
+        int carry = 0;
+
+        while (curr1 != null || curr2 != null || carry > 0) {
+            int x = (curr1 != null) ? curr1.val : 0;
+            int y = (curr2 != null) ? curr2.val : 0;
+
+            int sum = x + y + carry;
+            carry = sum / 10;
+
+            tail.next = new ListNode(sum % 10);
+            tail = tail.next;
+
+            if (curr1 != null) curr1 = curr1.next;
+            if (curr2 != null) curr2 = curr2.next;
+        }
+
+        return dummy.next;
+
+    }
      // Adds two numbers represented by reversed linked lists
     // without using a dummy head node.
     //Time Complexity: O(max(m, n)), Space Complexity: O(max(m, n))
-    
+
      private ListNode addTwoNumbersWithoutDummyNode(ListNode l1, ListNode l2) {
         // Pointers to traverse the two input lists
         ListNode curr1 = l1;
