@@ -5,8 +5,57 @@
 public class OddEvenLinkedList {
     public ListNode oddEvenList(ListNode head) {
         // return oddEvenListWithExtraSpace(head);
-         return oddEvenListWithExtraSpace2(head);
+         // return oddEvenListWithExtraSpace2(head);
+        return oddEvenListWithOutExtraSpace(head);
     }
+
+    // Approach: In-Place Reordering Without Extra Space
+    // Time Complexity: O(N)
+    // Space Complexity: O(1)
+    
+    private ListNode oddEvenListWithOutExtraSpace(ListNode head) {
+    // If the list is empty or has only one node,
+    // odd-even reordering is not needed
+    if (head == null || head.next == null) {
+        return head;
+    }
+
+    // odd pointer starts at the first node (position 1)
+    ListNode odd = head;
+
+    // even pointer starts at the second node (position 2)
+    ListNode even = head.next;
+
+    // Keep the head of even nodes so we can attach it after odd list at the end
+    ListNode evenHead = head.next;
+
+    // Re-link nodes such that:
+    // - odd list: 1 -> 3 -> 5 -> ...
+    // - even list: 2 -> 4 -> 6 -> ...
+    while (even != null && even.next != null) {
+
+        // Link current odd node to the next odd node
+        // (skip the current even node)
+        odd.next = odd.next.next;
+
+        // Link current even node to the next even node
+        // (skip the odd node we just linked)
+        even.next = even.next.next;
+
+        // Move odd pointer forward to the next odd node
+        odd = odd.next;
+
+        // Move even pointer forward to the next even node
+        even = even.next;
+    }
+
+    // After separating odds and evens,
+    // attach the even list after the last odd node
+    odd.next = evenHead;
+
+    // The head of the list remains unchanged
+    return head;
+}
 
     // Approach: Using Extra Space (Alternative Implementation)
     // Time Complexity: O(N)    
