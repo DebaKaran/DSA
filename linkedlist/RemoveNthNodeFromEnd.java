@@ -7,7 +7,51 @@
 public class RemoveNthNodeFromEnd {
     
     public ListNode removeNthNodeFromEnd(ListNode head, int n) {
-        return removeNthNodeFromEndBruteForce(head, n);
+        //return removeNthNodeFromEndBruteForce(head, n);
+        return removeNthNodeFromEndUsingTwoPointers(head, n);
+    }
+
+    // Approach: Two Pointers - Single Pass
+    // Time Complexity: O(L) where L is the length of the linked list
+    // Space Complexity: O(1)
+    
+    private ListNode removeNthNodeFromEndUsingTwoPointers(ListNode head, int n) {
+
+        // Edge case: empty list or invalid n
+        if (head == null || n < 0) {
+            return head;
+        }
+
+        // Fast and slow pointers both start at head
+        ListNode fast = head;
+        ListNode slow = head;
+
+        // Move fast pointer n steps ahead
+        int steps = 0;
+        while (fast != null && steps < n) {
+            fast = fast.next;
+            steps++;
+        }
+
+        // If fast becomes null after moving n steps,
+        // it means we need to delete the head node
+        if (fast == null) {
+            return head.next;
+        }
+
+        // Move both pointers until fast reaches the last node
+        // slow will then point to the node just before the target node
+        while (fast.next != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+
+        // Delete the nth node from the end
+        ListNode nodeToDelete = slow.next;
+        slow.next = (nodeToDelete != null) ? nodeToDelete.next : null;
+
+        // Return the updated head
+        return head;
     }
     
     // Approach: Brute Force - Two Passes
