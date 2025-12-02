@@ -16,9 +16,54 @@ public class PalindromeLinkedList {
 
         //return isPalindromeStackBased(head);
 
-        return isPalindromeWithoutExtraSpace(head);
+        // return isPalindromeWithoutExtraSpace(head);
+
+        return isPalindromeInPlace(head);
     }
 
+    // In-place approach to check for palindrome
+    // Time Complexity: O(N), 
+
+    // Find middle → O(N/2)
+
+    // Reverse second half → O(N/2)
+
+    // Compare halves → O(N/2)
+
+    // Restore list → O(N/2)
+    
+    // Space Complexity: O(1)
+    private boolean isPalindromeInPlace(ListNode head) {
+
+        // Step 1: Find the middle using slow & fast pointers
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while (fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+
+        // Step 2: Reverse the second half of the list
+        ListNode secondHalfReversedHead = reverseList(slow.next);
+
+        // Step 3: Compare first half and reversed second half
+        ListNode firstHalfPointer = head;
+        ListNode secondHalfPointer = secondHalfReversedHead;
+
+        while (secondHalfPointer != null) {
+            if (firstHalfPointer.val != secondHalfPointer.val) {
+                return false;
+            }
+            firstHalfPointer = firstHalfPointer.next;
+            secondHalfPointer = secondHalfPointer.next;
+        }
+
+        // Step 4: Restore the original list structure
+        reverseList(secondHalfReversedHead);
+
+        return true;
+    }
     // In-place approach to check for palindrome
 
     //  Time Complexity
@@ -37,7 +82,7 @@ public class PalindromeLinkedList {
 
     // ✅ Time Complexity: O(N)
     // Space Complexity: O(1)
-    
+
     // Steps:
     // 1. Calculate length of the linked list
     // 2. Find the middle of the linked list
