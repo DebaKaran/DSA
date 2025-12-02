@@ -9,7 +9,42 @@ public class AddOneToNumberRepresentedByLinkedList {
             return new Node(1);
         }
 
-        return addOneToLinkedListNumber(head);
+        //return addOneToLinkedListNumber(head);
+        
+        // Recursively add one starting from the last node
+        int carry = addOneUsingRecursion(head);
+
+        // If carry remains after processing all nodes,
+        // create a new node at the front
+        if (carry > 0) {
+            Node newHead = new Node(carry);
+            newHead.next = head;
+            head = newHead;
+        }
+
+        return head;
+    }
+
+    private int addOneUsingRecursion(Node current) {
+
+        // Base case:
+        // If we have reached past the last node,
+        // return carry = 1 (this is where "+1" happens)
+        if (current == null) {
+            return 1;
+        }
+
+        // Recursively process the next node
+        int carry = addOneUsingRecursion(current.next);
+
+        // Add carry to current node's data
+        int sum = current.data + carry;
+
+        // Update current node's value
+        current.data = sum % 10;
+
+        // Return carry for previous node
+        return sum / 10;
     }
 
     // Helper method to add one to the number represented by the linked list
