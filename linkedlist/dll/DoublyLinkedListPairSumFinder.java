@@ -13,8 +13,65 @@ import java.util.Set;
      */
     public static ArrayList<ArrayList<Integer>> findPairsWithGivenSum(int target, Node head) {
         ArrayList<ArrayList<Integer>> result = new ArrayList<>();
-        findPairsWithGivenSumUsingHashing(target, head, result);
+        //findPairsWithGivenSumUsingHashing(target, head, result);
+        //findPairsWithGivenSumWithoutUsingExtraSpace(target, head, result);
+        findPairsWithGivenSumUsingTwoPointers(target, head, result);
         return result;
+    }
+
+    /**
+     * Uses two pointers (head and tail) moving towards each other to
+     * find all pairs whose sum equals the target.
+     * Assumes the doubly linked list is sorted in non-decreasing order.
+     * Time Complexity: O(n)
+     * Space Complexity: O(1)
+     */
+    private static void findPairsWithGivenSumUsingTwoPointers(int target,
+                                                              Node head,
+                                                              ArrayList<ArrayList<Integer>> result) {
+
+        // If the list is empty or has only one node, no pairs can exist
+        if (head == null || head.next == null) {
+            return;
+        }
+
+        // Left pointer starts from the head (smallest value)
+        Node leftPointer = head;
+
+        // Right pointer starts from the tail (largest value)
+        Node rightPointer = head;
+        while (rightPointer.next != null) {
+            rightPointer = rightPointer.next;
+        }
+
+        // Move both pointers towards each other
+        while (leftPointer != null &&
+               rightPointer != null &&
+               leftPointer != rightPointer &&
+               rightPointer.next != leftPointer) {
+
+            int sum = leftPointer.data + rightPointer.data;
+
+            if (sum == target) {
+                // Found a pair whose sum equals target
+                ArrayList<Integer> pair = new ArrayList<>();
+                pair.add(leftPointer.data);   // smaller or equal
+                pair.add(rightPointer.data);  // larger or equal
+                result.add(pair);
+
+                // Move both pointers inward to find more pairs
+                leftPointer = leftPointer.next;
+                rightPointer = rightPointer.prev;
+
+            } else if (sum < target) {
+                // Need a larger sum -> move left pointer towards larger values
+                leftPointer = leftPointer.next;
+
+            } else { // sum > target
+                // Need a smaller sum -> move right pointer towards smaller values
+                rightPointer = rightPointer.prev;
+            }
+        }
     }
 
     /**
