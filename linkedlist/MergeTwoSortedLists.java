@@ -24,7 +24,44 @@ public class MergeTwoSortedLists {
     // If list2 is empty → result is list1
     if(list2 == null) return list1;
 
-    return mergeTwoListsUsingExtraSpace(list1, list2);
+    //return mergeTwoListsUsingExtraSpace(list1, list2);
+
+    return mergeByReusingNodes(list1, list2);
+}
+
+//Time Complexity: O(n + m) where n and m are lengths of list1 and list2
+//Space Complexity: O(1) as no extra space is used for new nodes
+
+private ListNode mergeByReusingNodes(ListNode list1, ListNode list2) {
+
+    ListNode p1 = list1;   // pointer for list1
+    ListNode p2 = list2;   // pointer for list2
+    
+    ListNode dummy = new ListNode(0);  // dummy head for merged list
+
+    ListNode tail = dummy;  // tail pointer for merged list
+
+    while(p1 != null && p2 != null) {
+        if(p1.val <= p2.val) {
+            tail.next = p1;
+            tail = p1;
+            p1 = p1.next;
+        } else {
+            tail.next = p2;
+            tail = p2;
+            p2 = p2.next;
+        }
+    }
+
+    // If list1 still has nodes, append them
+    if(p1 != null) {
+        tail.next = p1;
+    } 
+    // Else append remaining nodes from list2
+    else {
+        tail.next = p2;
+    }
+    return dummy.next;
 }
 
 // Merging two sorted linked lists using extra space for new nodes
