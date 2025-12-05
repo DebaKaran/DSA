@@ -1,3 +1,4 @@
+import java.util.PriorityQueue;
 
 /**
  * Merge K sorted linked lists by repeatedly merging lists pairwise (sequentially).
@@ -13,12 +14,77 @@ public class MergeKSortedListsSequential {
      * Public API: merge an array of sorted linked lists and return the head of the merged list.
      */
     public ListNode mergeKLists(ListNode[] lists) {
-        return mergeKListsSequential(lists);
+        //return mergeKListsSequential(lists);
+        return mergeKListsWithMinHeap(lists);
+    }
+
+     /**
+     * Merge k sorted lists using a min-heap that stores the current head nodes.
+     * Time: O(N log k), Space: O(k) for the heap (k = number of lists, N = total nodes).
+     */
+    private ListNode mergeKListsWithMinHeap(ListNode[] lists) {
+        // Handle empty input array
+        if (lists == null || lists.length == 0) {
+            return null;
+        }
+
+        // Min-heap keyed by node value; stores (value, node) pairs
+        PriorityQueue<NodeEntry> minHeap = new PriorityQueue<>();
+
+        // Initialize heap with the head of each non-empty list
+        for (ListNode node : lists) {
+            if (node != null) {
+                minHeap.add(new NodeEntry(node.val, node));
+            }
+        }
+
+        // Dummy head simplifies result list construction
+        ListNode dummy = new ListNode(-1);
+        ListNode tail = dummy;
+
+        // Extract the smallest node and push its successor (if any)
+        while (!minHeap.isEmpty()) {
+            NodeEntry entry = minHeap.remove();
+            ListNode smallest = entry.node;
+
+            // Append the smallest node to the result list (reusing node)
+            tail.next = smallest;
+            tail = smallest;
+
+            // If the extracted node has a next, push it to the heap
+            if (smallest.next != null) {
+                minHeap.add(new NodeEntry(smallest.next.val, smallest.next));
+            }
+        }
+
+        // Ensure the new tail points to null (safety in case original nodes linked elsewhere)
+        tail.next = null;
+
+        return dummy.next;
     }
 
     /**
+     * Simple helper pair that allows PriorityQueue to order entries by node value.
+     */
+    private static class NodeEntry implements Comparable<NodeEntry> {
+        final int val;
+        final ListNode node;
+
+        NodeEntry(int val, ListNode node) {
+            this.val = val;
+            this.node = node;
+        }
+
+        @Override
+        public int compareTo(NodeEntry other) {
+            return Integer.compare(this.val, other.val);
+        }
+    }
+    /**
      * Sequentially merge lists: merge lists[0] with lists[1], then merge result with lists[2], etc.
      * Works in-place by relinking nodes (no per-node allocation).
+     * 
+     * Time complexity: O(N*(K ^ 2)), Space complexity: O(1).
      */
     private ListNode mergeKListsSequential(ListNode[] lists) {
         // Handle empty input
