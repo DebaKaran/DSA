@@ -15,6 +15,10 @@ class ParenthesisValidator {
 
         if (s == null || s.length() == 0) return true;
 
+        int n = s.length();
+        // Quick reject: odd length cannot be balanced
+        if ((n & 1) == 1) return false;
+
         // Map each closing bracket to its corresponding opening bracket
         Map<Character, Character> closingToOpening = new HashMap<>();
         closingToOpening.put(')', '(');
@@ -23,28 +27,39 @@ class ParenthesisValidator {
 
         Stack<Character> stack = new Stack<>();
 
-        for (int i = 0; i < s.length(); i++) {
+        for (int i = 0; i < n; i++) {
             char ch = s.charAt(i);
 
-            // If it's an opening bracket → push it
-            if (isOpening(ch)) {
+            // If opening bracket, push to stack
+            if (ch == '(' || ch == '{' || ch == '[') {
                 stack.push(ch);
-            } else {
-                // If encountering a closing bracket with no opening match
-                if (stack.isEmpty()) return false;
+                continue;
+            }
 
-                char top = stack.pop();
+            // For closing bracket, ensure there's a matching opening bracket
+            if (stack.isEmpty()) return false;
 
-                // Mismatch → invalid
-                if (closingToOpening.get(ch) != top) return false;
+            char top = stack.pop();
+            switch (ch) {
+                case ')':
+                    if (top != '(') return false;
+                    break;
+                case ']':
+                    if (top != '[') return false;
+                    break;
+                case '}':
+                    if (top != '{') return false;
+                    break;
+                default:
+                    // If there are other characters (problem statement usually forbids),
+                    // treat as invalid. Remove this if input can contain other chars.
+                    return false;
             }
         }
 
-        // Valid only if all openings are matched
+        // All openings must be matched
         return stack.isEmpty();
     }
 
-    private boolean isOpening(char ch) {
-        return ch == '(' || ch == '{' || ch == '[';
-    }
+   
 }
