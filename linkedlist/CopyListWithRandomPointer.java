@@ -22,7 +22,70 @@ public class CopyListWithRandomPointer {
      * Public API: create a deep copy of a list with next + random pointers.
      */
     public Node copyRandomList(Node head) {
-        return copyUsingHashMap(head);
+         return copyWithoutHashMap(head);
+    }
+
+    /**
+     * Interleaving approach (no hashmap):
+     * 1) First pass: for each original node, insert its copy right after it.
+     *    original: A -> B -> C
+     *    becomes:  A -> A' -> B -> B' -> C -> C'
+     *
+     * 2) Second pass: assign copy.random = original.random.next (if random != null).
+     *
+     * 3) Third pass: restore original list and extract the copied list.
+     *
+     * Time: O(n), Extra space: O(1) (excluding output nodes).
+     */
+    private Node copyWithoutHashMap(Node head) {
+        if (head == null) return null;
+
+        // 1) Interleave copied nodes after originals
+        Node iter = head;
+        while (iter != null) {
+            Node copy = new Node(iter.val);
+            Node nextNode = iter.next;
+
+            iter.next = copy;
+            copy.next = nextNode;
+
+            iter = nextNode;
+        }
+
+        // 2) Assign random pointers for the copied nodes
+        iter = head;
+        while (iter != null) {
+            Node copyNode = iter.next;
+            Node randomNode = iter.random;
+            copyNode.random = (randomNode == null) ? null : randomNode.next;
+            // Move to the next original node
+            iter = copyNode.next;
+        }
+
+        // 3) Separate the interleaved lists: restore original and extract copy list
+        Node pseudoHead = new Node(-1);   // dummy head for the copied list
+        Node copyTail = pseudoHead;
+        iter = head;
+
+        while (iter != null) {
+            Node copyNode = iter.next;
+            Node nextNode = copyNode.next; // start of next original node
+
+            // append copyNode to copied list
+            copyTail.next = copyNode;
+            copyTail = copyNode;
+
+            // restore original list link
+            iter.next = nextNode;
+
+            // set next for copied node (safety: nextNode may be null)
+            copyNode.next = (nextNode == null) ? null : nextNode.next;
+
+            // advance original iterator
+            iter = nextNode;
+        }
+
+        return pseudoHead.next;
     }
 
     /**
