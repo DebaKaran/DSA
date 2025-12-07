@@ -1,4 +1,4 @@
-package stack_queue;
+package stack_queue.implemenations;
 
 // Singly Linked List node
 class Node {

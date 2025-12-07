@@ -1,4 +1,4 @@
-package stack_queue;
+package stack_queue.implemenations;
 
 import java.util.HashMap;
 import java.util.Map;
