@@ -19,12 +19,6 @@ class ParenthesisValidator {
         // Quick reject: odd length cannot be balanced
         if ((n & 1) == 1) return false;
 
-        // Map each closing bracket to its corresponding opening bracket
-        Map<Character, Character> closingToOpening = new HashMap<>();
-        closingToOpening.put(')', '(');
-        closingToOpening.put(']', '[');
-        closingToOpening.put('}', '{');
-
         Stack<Character> stack = new Stack<>();
 
         for (int i = 0; i < n; i++) {
