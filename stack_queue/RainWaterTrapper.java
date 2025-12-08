@@ -12,8 +12,50 @@ public final class RainWaterTrapper {
 
     /** Public API */
     public int trap(int[] height) {
-        //return trapUsingPrefixSuffixMax(height);
-        return trapWithoutExtraSpace(height);
+        //return trapUsingPrefixAndSuffixMax(height);
+        //return trapWithoutUsingExtraSpace(height);
+
+        return trapTwoPointers(height);
+    }
+
+    /** Two-pointer implementation (O(n) time, O(1) space). */
+    private int trapTwoPointers(int[] height) {
+        if (height == null || height.length == 0) return 0;
+
+        int left = 0;
+        int right = height.length - 1;
+
+        int leftMax = 0;   // max seen so far from the left
+        int rightMax = 0;  // max seen so far from the right
+
+        int total = 0;
+
+        // Process until pointers cross
+        while (left <= right) {
+            if (height[left] <= height[right]) {
+                // Left side is the limiting side (leftMax <= rightMax)
+                if (height[left] >= leftMax) {
+                    // update left boundary
+                    leftMax = height[left];
+                } else {
+                    // water trapped = leftMax - height[left]
+                    total += (leftMax - height[left]);
+                }
+                left++;
+            } else {
+                // Right side is the limiting side (rightMax < leftMax)
+                if (height[right] >= rightMax) {
+                    // update right boundary
+                    rightMax = height[right];
+                } else {
+                    // water trapped = rightMax - height[right]
+                    total += (rightMax - height[right]);
+                }
+                right--;
+            }
+        }
+
+        return total;
     }
 
     /**
@@ -26,7 +68,7 @@ public final class RainWaterTrapper {
         * - Left → maxIndex
         * - Right → maxIndex
         */
-       
+
     private int trapWithoutExtraSpace(int[] height) {
         if (height == null || height.length == 0) return 0;
 
