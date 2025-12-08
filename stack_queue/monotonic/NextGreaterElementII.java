@@ -1,6 +1,7 @@
 package stack_queue.monotonic;
 
 import java.util.Arrays;
+import java.util.Stack;
 
 /**
  * LeetCode 503 — Next Greater Element II (brute-force circular implementation).
@@ -16,9 +17,52 @@ public final class NextGreaterElementII {
      * Public API.
      */
     public int[] nextGreaterElements(int[] nums) {
-        return computeNextGreaterBruteForce(nums);
+        //return computeNextGreaterBruteForce(nums);
+        return computeNextGreaterUsingStack(nums);
     }
 
+     /**
+     * Two-pass solution using a monotonic decreasing stack.
+     *
+     * Pass 1 (right→left): prepare stack with future candidates (simulates circularity).
+     * Pass 2 (right→left): resolve next greater element for each index.
+     *
+     * Time:  O(n)
+     * Space: O(n)
+     */
+    private int[] computeNextGreaterUsingStack(int[] nums) {
+        if (nums == null || nums.length == 0) return new int[0];
+
+        int n = nums.length;
+        int[] result = new int[n];
+        Arrays.fill(result, -1);  // default when no greater exists
+
+        Stack<Integer> stack = new Stack<>();
+
+        // Pass 1: preload stack with decreasing elements to simulate circular array
+        for (int i = n - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && stack.peek() <= nums[i]) {
+                stack.pop();
+            }
+            stack.push(nums[i]);
+        }
+
+        // Pass 2: actual next-greater resolution for each index
+        for (int i = n - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && stack.peek() <= nums[i]) {
+                stack.pop();
+            }
+
+            if (!stack.isEmpty()) {
+                result[i] = stack.peek();
+            }
+
+            // Push current element for future matches
+            stack.push(nums[i]);
+        }
+
+        return result;
+    }
     /**
      * Brute-force circular scan:
      * For each index i, scan the next n-1 positions (wrapping via modulo)
