@@ -12,7 +12,57 @@ public final class RainWaterTrapper {
 
     /** Public API */
     public int trap(int[] height) {
-        return trapUsingPrefixSuffixMax(height);
+        //return trapUsingPrefixSuffixMax(height);
+        return trapWithoutExtraSpace(height);
+    }
+
+    /**
+     * Computes trapped rainwater by splitting at the global maximum height.
+     *
+     * Time:  O(n)
+     * Space: O(1)
+        * O(1)-space approach using the fact that the global maximum bar splits
+        * the problem into two independent monotonic scans:
+        * - Left → maxIndex
+        * - Right → maxIndex
+        */
+       
+    private int trapWithoutExtraSpace(int[] height) {
+        if (height == null || height.length == 0) return 0;
+
+        int n = height.length;
+        int maxIndex = findMaxIndex(height);
+        int total = 0;
+
+        // Left part: process using running leftMax
+        int leftMax = 0;
+        for (int i = 0; i < maxIndex; i++) {
+            leftMax = Math.max(leftMax, height[i]);
+            total += leftMax - height[i];
+        }
+
+        // Right part: process using running rightMax
+        int rightMax = 0;
+        for (int i = n - 1; i > maxIndex; i--) {
+            rightMax = Math.max(rightMax, height[i]);
+            total += rightMax - height[i];
+        }
+
+        return total;
+    }
+
+    /** Returns index of the highest bar in the array. */
+    private int findMaxIndex(int[] height) {
+        int maxIndex = 0;
+        int max = height[0];
+
+        for (int i = 1; i < height.length; i++) {
+            if (height[i] > max) {
+                max = height[i];
+                maxIndex = i;
+            }
+        }
+        return maxIndex;
     }
 
     /**
