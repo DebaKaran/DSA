@@ -1,4 +1,4 @@
-package stack_queue.monotonic;
+package stack_queue;
 
 import java.util.Stack;
 
