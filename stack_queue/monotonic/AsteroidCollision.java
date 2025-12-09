@@ -16,8 +16,51 @@ public final class AsteroidCollision {
 
     /** Public API */
     public int[] asteroidCollision(int[] asteroids) {
-        return simulateCollisions(asteroids);
+        //return asteroidCollisionUsingstack(asteroids);
+        return collide(asteroids);
     }
+
+    /**
+     * Ultra-fast simulation using primitive int[] stack.
+     * Time:  O(n) amortized
+     * Space: O(n)
+     */
+    private int[] collide(int[] asteroids) {
+        int n = asteroids.length;
+
+        // manual stack using primitive array
+        int[] stack = new int[n];
+        int top = -1;  // empty stack
+
+        for (int curr : asteroids) {
+            boolean destroyed = false;
+
+            // Only collide if stack.top > 0 and curr < 0
+            while (top >= 0 && stack[top] > 0 && curr < 0) {
+                int left = stack[top];
+                int absCurr = -curr;  // curr < 0 → abs = -curr
+
+                if (left < absCurr) {
+                    // left asteroid destroyed
+                    top--;
+                    continue;
+                } else if (left > absCurr) {
+                    // curr destroyed
+                    destroyed = true;
+                    break;
+                } else {
+                    // both destroyed
+                    top--;
+                    destroyed = true;
+                    break;
+                }
+            }
+
+            // If curr survived collisions → push it
+            if (!destroyed) {
+                stack[++top] = curr;
+            }
+        }
 
     /**
      * Simulate asteroid collisions using a stack.
