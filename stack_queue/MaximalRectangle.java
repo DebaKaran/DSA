@@ -24,8 +24,10 @@ public final class MaximalRectangle {
      * Time:  O(rows * cols) — update histogram O(cols) per row + O(cols) histogram scan
      * Space: O(rows * cols) if using a full prefix matrix (as below)
      *        (see optimizations for O(cols) variant)
+     * 
+     * Based on Leetcode 84
      */
-    public int maximalRectangleUsingLeetcode84Concept(char[][] matrix) {
+    public int maximalRectangleUsingHistogramPerRow(char[][] matrix) {
         if (matrix == null || matrix.length == 0) return 0;
         if (matrix[0] == null || matrix[0].length == 0) return 0;
 
