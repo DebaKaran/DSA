@@ -19,7 +19,48 @@ public final class LargestRectangleHistogram {
 
     /** Public API */
     public int largestRectangleArea(int[] heights) {
-        return largestRectangleAreaUsingStacks(heights);
+        //return largestRectangleAreaUsingStacks(heights);
+        return computeLargestRectangleSinglePass(heights);
+    }
+
+    /**
+     * Single-pass solution using a monotonic stack.
+     *
+     * Time:  O(n)  — each index pushed/popped at most once
+     * Space: O(n)  — stack of indices
+     */
+    private int computeLargestRectangleSinglePass(int[] heights) {
+        if (heights == null || heights.length == 0) return 0;
+
+        Stack<Integer> stack = new Stack<>();
+        int n = heights.length;
+        int maxArea = 0;
+
+        // Process all bars from left to right
+        for (int i = 0; i < n; i++) {
+            // Pop while current bar is smaller — rectangle for top bar ends here
+            while (!stack.isEmpty() && heights[i] < heights[stack.peek()]) {
+                int topIndex = stack.pop();
+                int rightBoundary = i;                        // first index to the right that is smaller
+                int leftBoundary  = stack.isEmpty() ? -1 : stack.peek(); // first smaller to the left
+                int width = rightBoundary - leftBoundary - 1;
+                int area  = heights[topIndex] * width;
+                if (area > maxArea) maxArea = area;
+            }
+            stack.push(i);
+        }
+
+        // Process remaining bars — their right boundary is past the end (n)
+        while (!stack.isEmpty()) {
+            int topIndex = stack.pop();
+            int rightBoundary = n;                        // no smaller on the right
+            int leftBoundary  = stack.isEmpty() ? -1 : stack.peek();
+            int width = rightBoundary - leftBoundary - 1;
+            int area  = heights[topIndex] * width;
+            if (area > maxArea) maxArea = area;
+        }
+
+        return maxArea;
     }
 
     /**
