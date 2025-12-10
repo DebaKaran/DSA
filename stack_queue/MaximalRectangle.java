@@ -14,7 +14,39 @@ public final class MaximalRectangle {
 
     /** Public API */
     public int maximalRectangle(char[][] matrix) {
-        return maximalRectangleUsingHistogramPerRow(matrix);
+        //return maximalRectangleUsingHistogramPerRow(matrix);
+        return maximalRectangleSpaceOptimized(matrix);
+    }
+
+    /**
+     * Space-optimized version that uses a single histogram array updated per row.
+     *
+     * Time:  O(rows * cols) — update histogram O(cols) per row + O(cols) histogram scan
+     * Space: O(cols) for the histogram array
+     */
+    private int maximalRectangleSpaceOptimized(char[][] matrix) {
+        // Defensive checks
+        if (matrix == null || matrix.length == 0) return 0;
+        if (matrix[0] == null || matrix[0].length == 0) return 0;
+
+        final int rows = matrix.length;
+        final int cols = matrix[0].length;
+
+        int[] histogram = new int[cols]; // heights for current row
+        int maxArea = 0;
+
+        for (int r = 0; r < rows; r++) {
+            // update histogram for row r
+            for (int c = 0; c < cols; c++) {
+                histogram[c] = (matrix[r][c] == '1') ? histogram[c] + 1 : 0;
+            }
+
+            // compute largest rectangle in histogram for this row
+            int area = computeLargestRectangleSinglePass(histogram);
+            if (area > maxArea) maxArea = area;
+        }
+
+        return maxArea;
     }
 
     /**
