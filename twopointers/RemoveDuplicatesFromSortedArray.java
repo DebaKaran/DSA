@@ -12,8 +12,31 @@ public class RemoveDuplicatesFromSortedArray {
 
     // Public API (keeps the original method name expected by LeetCode)
     public int removeDuplicates(int[] nums) {
-        return removeDuplicatesWithoutExtraSpace(nums);
+        // return removeDuplicatesWithoutExtraSpace(nums);
         // return removeDuplicatesUsingSet(nums);
+        return removeDuplicatesWithoutExtraSpaceImproved(nums);
+    }
+
+    private int removeDuplicatesWithoutExtraSpaceImproved(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        // slow pointer: position of last unique element
+        int slow = 0;
+
+        // fast pointer scans through array
+        for (int fast = 1; fast < nums.length; fast++) {
+
+            // When a new unique element is found
+            if (nums[fast] != nums[slow]) {
+                slow++;                 // advance slow pointer
+                nums[slow] = nums[fast]; // place new unique element
+            }
+        }
+
+        // Length of unique portion is slow + 1
+        return slow + 1;
     }
 
     /**
