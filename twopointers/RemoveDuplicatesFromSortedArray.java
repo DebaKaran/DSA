@@ -12,7 +12,50 @@ public class RemoveDuplicatesFromSortedArray {
 
     // Public API (keeps the original method name expected by LeetCode)
     public int removeDuplicates(int[] nums) {
-        return removeDuplicatesUsingSet(nums);
+        return removeDuplicatesWithoutExtraSpace(nums);
+        // return removeDuplicatesUsingSet(nums);
+    }
+
+    /**
+     * Removes duplicates from a sorted array using an in-place logic.
+     * Uses two pointers (slow & fast), scanning through consecutive duplicates.
+     *
+     * Time Complexity:  O(n)
+     * Space Complexity: O(1)
+     */
+    private int removeDuplicatesWithoutExtraSpace(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;   // no elements → no uniques
+        }
+        if (nums.length == 1) {
+            return 1;   // single element → already unique
+        }
+
+        int n = nums.length;
+
+        int slow = 0;   // position where next unique value should be written
+        int fast = 0;   // scanning pointer
+        int uniqueCount = 0;
+
+        while (fast < n) {
+
+            // Move fast pointer forward as long as duplicates continue
+            while (fast + 1 < n && nums[fast] == nums[fast + 1]) {
+                fast++;   // skip duplicate values
+            }
+
+            // Now nums[fast] is the last occurrence of a unique block
+            // Swap unique element into correct "slow" position
+            int temp = nums[slow];
+            nums[slow] = nums[fast];
+            nums[fast] = temp;
+
+            slow++;        // move slow to next empty slot
+            fast++;        // move fast to next group
+            uniqueCount++; // we've placed one more unique value
+        }
+
+        return uniqueCount;
     }
 
     /**
