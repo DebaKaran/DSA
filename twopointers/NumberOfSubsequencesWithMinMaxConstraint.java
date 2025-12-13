@@ -1,5 +1,7 @@
 package twopointers;
 
+import java.util.Arrays;
+
 /**
  * LeetCode 1498
  * Difficulty: Medium
@@ -19,7 +21,59 @@ public class NumberOfSubsequencesWithMinMaxConstraint {
         // index = 0
         // no min/max yet
         // chosen = false (empty subsequence)
-        return countSubsequencesRec(nums, target, 0, 0, 0, false);
+        //return countSubsequencesRec(nums, target, 0, 0, 0, false);
+
+        return countSubsequencesTwoPointers(nums, target);
+    }
+
+    /**
+     * Counts valid subsequences where min + max <= target.
+     *
+     * Approach:
+     * 1. Sort the array
+     * 2. Use two pointers (left = min, right = max)
+     * 3. If nums[left] + nums[right] <= target,
+     *    then all subsequences that include nums[left] and
+     *    any subset of elements in (left+1 .. right) are valid.
+     *
+     * Time Complexity:  O(n log n)
+     * Sorting: O(n log n)
+
+     * Two-pointer traversal: O(n)
+
+    * Power precomputation: O(n)
+     * Space Complexity: O(n)
+     */
+    private int countSubsequencesTwoPointers(int[] nums, int target) {
+        Arrays.sort(nums);
+        int n = nums.length;
+
+        int left = 0;
+        int right = n - 1;
+        long result = 0L;
+
+        // Precompute powers of 2 modulo MOD
+        // power[i] = 2^i % MOD
+        int[] power = new int[n];
+        power[0] = 1;
+        for (int i = 1; i < n; i++) {
+            power[i] = (power[i - 1] * 2) % MOD;
+        }
+
+        // Two-pointer traversal
+        while (left <= right) {
+            if (nums[left] + nums[right] > target) {
+                // Current max too large, try smaller max
+                right--;
+            } else {
+                // nums[left] can be the minimum
+                // All subsets of elements between left and right are valid
+                result = (result + power[right - left]) % MOD;
+                left++;
+            }
+        }
+
+        return (int) result;
     }
 
     /**
