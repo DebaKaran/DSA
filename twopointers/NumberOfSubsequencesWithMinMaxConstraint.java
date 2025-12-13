@@ -37,6 +37,11 @@ public class NumberOfSubsequencesWithMinMaxConstraint {
      *    any subset of elements in (left+1 .. right) are valid.
      *
      * Time Complexity:  O(n log n)
+     * Sorting: O(n log n)
+
+     * Two-pointer traversal: O(n)
+
+    * Power precomputation: O(n)
      * Space Complexity: O(n)
      */
     private int countSubsequencesTwoPointers(int[] nums, int target) {
