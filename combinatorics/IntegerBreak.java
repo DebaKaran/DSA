@@ -17,13 +17,42 @@ class IntegerBreak {
         dp[1] = 1;
 
         return maxProductMemoized(number, dp); */
-        return maxProductBottomUpDP(number);
+        //return maxProductBottomUpDP(number);
+        // return maxProductBottomUpDP(n);
+
+        return integerBreakOptimsation(number);
+    }
+
+    // Optimized Mathematical approach
+    // Time Complexity: O(log n)
+    // Space Complexity: O(1)
+    
+    private int integerBreakOptimsation(int n) {
+
+        // Base cases required by the problem
+        if (n == 2) return 1;
+        if (n == 3) return 2;
+
+        int product = 1;
+        int remaining = n;
+
+        // Break the number into as many 3s as possible
+        while (remaining > 4) {
+            product *= 3;
+            remaining -= 3;
+        }
+
+        // Multiply the final remainder (2, 3, or 4)
+        product *= remaining;
+
+        return product;
+    }
     }
 
     // Bottom-Up Dynamic Programming approach
     //Time Complexity: O(n^2)
     //Space Complexity: O(n)
-    
+
     private int maxProductBottomUpDP(int number) {
 
         // dp[x] stores the maximum product obtainable by breaking integer x
