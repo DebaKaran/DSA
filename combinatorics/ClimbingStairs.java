@@ -7,21 +7,46 @@ package combinatorics;
  */
 public class ClimbingStairs {
 
-    public int climbStairs(int totalSteps) {
-        //return countWaysUsingRecursion(totalSteps);
+    public int climbStairs(int n) {
+        //return countWaysUsingRecursion(n);
 
-        // Memo array to store results of subproblems
-        int[] memo = new int[totalSteps + 1];
-
-        // Base case: one way to stay at step 0
+        /** int[] memo = new int[n + 1];
         memo[0] = 1;
 
-        return countWaysUsingMemoization(totalSteps, memo);
+        return countWaysUsingMemoziation(n, memo); */
+
+        return countWaysBottomUpDP(n);
+    }
+
+    // O(n) time complexity
+    // O(n) space complexity for dp array
+    
+    private int countWaysBottomUpDP(int totalSteps) {
+
+        // If there are 0 or 1 steps, there is exactly one way to reach the top
+        if (totalSteps <= 1) {
+            return 1;
+        }
+
+        // dp[i] represents number of ways to reach step i
+        int[] dp = new int[totalSteps + 1];
+
+        // Base cases
+        dp[0] = 1; // One way to stay at the ground
+        dp[1] = 1; // One way to reach the first step
+
+        // Build solution bottom-up
+        for (int step = 2; step <= totalSteps; step++) {
+            dp[step] = dp[step - 1] + dp[step - 2];
+        }
+
+        // Result stored at dp[totalSteps]
+        return dp[totalSteps];
     }
 
     // O(n) time complexity
     // O(n) space complexity for memoization array
-    
+
     private int countWaysUsingMemoization(int stepsRemaining, int[] memo) {
         // If result already computed, return it
         if (memo[stepsRemaining] != 0) {
