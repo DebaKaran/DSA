@@ -11,7 +11,7 @@ class IntegerBreak {
         // Problem guarantees number >= 2
         //return maxProductRecursive(number);
         // dp[i] stores the maximum product obtainable from integer i
-        int[] dp = new int[n + 1];
+        int[] dp = new int[number + 1];
 
         // Base case
         dp[1] = 1;
