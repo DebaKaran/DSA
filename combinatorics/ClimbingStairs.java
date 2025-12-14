@@ -15,12 +15,39 @@ public class ClimbingStairs {
 
         return countWaysUsingMemoziation(n, memo); */
 
-        return countWaysBottomUpDP(n);
+        //return countWaysBottomUpDP(n);
+        return countWaysSpaceOptimizedDP(n);
+    }
+
+    // O(n) time complexity
+    // O(1) space complexity
+    
+    private int countWaysSpaceOptimizedDP(int totalSteps) {
+
+        // If there are 0 or 1 steps, there is exactly one way to reach the top
+        if (totalSteps <= 1) {
+            return 1;
+        }
+
+        // waysToPrevPrevStep = ways to reach step (i - 2)
+        // waysToPrevStep     = ways to reach step (i - 1)
+        int waysToPrevPrevStep = 1; // dp[0]
+        int waysToPrevStep = 1;     // dp[1]
+
+        // Build solution bottom-up using only two variables
+        for (int step = 2; step <= totalSteps; step++) {
+            int currentWays = waysToPrevStep + waysToPrevPrevStep;
+            waysToPrevPrevStep = waysToPrevStep;
+            waysToPrevStep = currentWays;
+        }
+
+        // Result corresponds to dp[totalSteps]
+        return waysToPrevStep;
     }
 
     // O(n) time complexity
     // O(n) space complexity for dp array
-    
+
     private int countWaysBottomUpDP(int totalSteps) {
 
         // If there are 0 or 1 steps, there is exactly one way to reach the top
