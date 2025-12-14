@@ -7,43 +7,52 @@ package dp.subsequences;
  */
 class SubsetSum {
 
-    static Boolean isSubsetSum(int[] nums, int targetSum) {
-        return checkSubsetSum(nums, 0, 0, targetSum);
+     static Boolean isSubsetSum(int[] numbers, int targetSum) {
+        
+        // Start recursion from the last index
+        return hasSubsetWithSum(numbers, numbers.length - 1, targetSum);
     }
 
-    // Helper method to check for subset sum using recursion
-    // index: current index in nums
-    // currentSum: sum of the current subset
-    // targetSum: desired sum to find
-    // Returns true if a subset with targetSum exists   
-    // Time Complexity: O(2^n) where n is the number of elements in nums
-    // Space Complexity: O(n) due to recursion stack
-    //Time Limit Exceeded for large inputs
-    
-    private static boolean checkSubsetSum(int[] nums, int index, int currentSum, int targetSum) {
-        // Base case: all elements processed
-        if (index == nums.length) {
-            return currentSum == targetSum;
+    /**
+     * Recursive helper method to check for subset sum.
+     *
+     * @param numbers   Input array
+     * @param index     Current index being considered
+     * @param remainingSum Sum still needed to reach target
+     * @return true if a valid subset exists, false otherwise
+     *
+     * Time Complexity: O(2^n)
+     * Space Complexity: O(n) due to recursion stack
+     *
+     * Note: This solution will cause TLE for large inputs on GFG.
+     */
+    private static boolean hasSubsetWithSum(
+            int[] numbers,
+            int index,
+            int remainingSum
+    ) {
+        // If required sum becomes 0, subset is found
+        if (remainingSum == 0) {
+            return true;
+        }
+
+        // Base case: only one element left
+        if (index == 0) {
+            return remainingSum == numbers[0];
         }
 
         // Choice 1: include current element
-        boolean include = checkSubsetSum(
-                nums,
-                index + 1,
-                currentSum + nums[index],
-                targetSum
-        );
+        if (numbers[index] <= remainingSum &&
+            hasSubsetWithSum(
+                    numbers,
+                    index - 1,
+                    remainingSum - numbers[index]
+            )) {
+            return true;
+        }
 
         // Choice 2: exclude current element
-        boolean exclude = checkSubsetSum(
-                nums,
-                index + 1,
-                currentSum,
-                targetSum
-        );
-
-        // If either choice works, subset exists
-        return include || exclude;
+        return hasSubsetWithSum(numbers, index - 1, remainingSum);
     }
 }
 
