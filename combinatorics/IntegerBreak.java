@@ -11,12 +11,60 @@ class IntegerBreak {
         // Problem guarantees number >= 2
         //return maxProductRecursive(number);
         // dp[i] stores the maximum product obtainable from integer i
+        /**int[] dp = new int[number + 1];
+
+        // Base case
+        dp[1] = 1;
+
+        return maxProductMemoized(number, dp); */
+        return maxProductBottomUpDP(number);
+    }
+
+    // Bottom-Up Dynamic Programming approach
+    //Time Complexity: O(n^2)
+    //Space Complexity: O(n)
+    
+    private int maxProductBottomUpDP(int number) {
+
+        // dp[x] stores the maximum product obtainable by breaking integer x
         int[] dp = new int[number + 1];
 
         // Base case
         dp[1] = 1;
 
-        return maxProductMemoized(number, dp);
+        // Build the solution for all values from 2 to number
+        for (int current = 2; current <= number; current++) {
+
+            int maxProduct = 0;
+
+            // Try all possible first splits: current = firstPart + (current - firstPart)
+            for (int firstPart = 1; firstPart < current; firstPart++) {
+
+                // Case 1: stop breaking the remaining part
+                int productWithoutFurtherSplit =
+                        firstPart * (current - firstPart);
+
+                // Case 2: continue breaking the remaining part
+                int productWithFurtherSplit =
+                        firstPart * dp[current - firstPart];
+
+                // Best product for this particular split
+                int bestForSplit = Math.max(
+                        productWithoutFurtherSplit,
+                        productWithFurtherSplit
+                );
+
+                // Track the maximum product for current
+                if (bestForSplit > maxProduct) {
+                    maxProduct = bestForSplit;
+                }
+            }
+
+            // Store the best product for current
+            dp[current] = maxProduct;
+        }
+
+        return dp[number];
     }
 
     /**
