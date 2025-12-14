@@ -9,7 +9,55 @@ class IntegerBreak {
 
     public int integerBreak(int number) {
         // Problem guarantees number >= 2
-        return maxProductRecursive(number);
+        //return maxProductRecursive(number);
+        // dp[i] stores the maximum product obtainable from integer i
+        int[] dp = new int[number + 1];
+
+        // Base case
+        dp[1] = 1;
+
+        return maxProductMemoized(number, dp);
+    }
+
+    /**
+     * f(x): maximum product obtainable by breaking integer x
+     * Time Complexity: O(n^2) – for each integer up to n, we try all splits
+     * Space Complexity: O(n) – for the memoization array
+     */
+    private int maxProductMemoized(int current, int[] dp) {
+
+        // If result already computed, reuse it
+        if (dp[current] != 0) {
+            return dp[current];
+        }
+
+        int maxProduct = 0;
+
+        // Try all possible first splits: current = i + (current - i)
+        for (int i = 1; i < current; i++) {
+
+            // Case 1: stop breaking the remaining part
+            int productWithoutFurtherSplit = i * (current - i);
+
+            // Case 2: continue breaking the remaining part
+            int productWithFurtherSplit =
+                    i * maxProductMemoized(current - i, dp);
+
+            // Best product for this split
+            int bestForSplit = Math.max(
+                    productWithoutFurtherSplit,
+                    productWithFurtherSplit
+            );
+
+            // Track the global maximum
+            if (bestForSplit > maxProduct) {
+                maxProduct = bestForSplit;
+            }
+        }
+
+        // Store and return the result for this state
+        dp[current] = maxProduct;
+        return maxProduct;
     }
 
     /**
