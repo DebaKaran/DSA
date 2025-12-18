@@ -8,7 +8,7 @@ package dp.subsequences;
 class SubsetSum {
 
      static Boolean isSubsetSum(int[] numbers, int targetSum) {
-        
+
         // Start recursion from the last index
         return hasSubsetWithSum(numbers, numbers.length - 1, targetSum);
     }
@@ -24,7 +24,7 @@ class SubsetSum {
      * Time Complexity: O(2^n)
      * Space Complexity: O(n) due to recursion stack
      *
-     * Note: This solution will cause TLE for large inputs on GFG.
+     * Note: All test cases are passing, but this approach may lead to TLE for large inputs.
      */
     private static boolean hasSubsetWithSum(
             int[] numbers,
@@ -34,6 +34,11 @@ class SubsetSum {
         // If required sum becomes 0, subset is found
         if (remainingSum == 0) {
             return true;
+        }
+
+        // Pruning: no need to continue if sum goes negative
+        if (remainingSum < 0) {
+            return false;
         }
 
         // Base case: only one element left
