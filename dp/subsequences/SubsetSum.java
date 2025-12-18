@@ -24,9 +24,63 @@ class SubsetSum {
         return existsSubsetWithSum(numbers, numbers.length - 1, targetSum, dp) == 1; */
         
         // Bottom-up DP approach
-        return hasSubsetWithSumBottomUp(numbers, targetSum);
+        //return hasSubsetWithSumBottomUp(numbers, targetSum);
+
+        return hasSubsetWithSumSpaceOptimized(numbers, targetSum);
     }
 
+    /**
+     * Space-optimized bottom-up DP solution for Subset Sum.
+     *
+     * dp[sum] represents whether a subset with total `sum` can be formed
+     * using elements processed so far.
+     *
+     * @param numbers   Input array of positive integers
+     * @param targetSum Desired target sum
+     * @return true if a subset exists, false otherwise
+     *
+     * Time Complexity: O(n × targetSum)
+     * Space Complexity: O(targetSum)
+     */
+    private static boolean hasSubsetWithSumSpaceOptimized(
+            int[] numbers,
+            int targetSum
+    ) {
+
+        boolean[] prev = new boolean[targetSum + 1];
+        prev[0] = true; // sum = 0 is always achievable (empty subset)
+
+        // Initialize DP for the first element
+        if (numbers[0] <= targetSum) {
+            prev[numbers[0]] = true;
+        }
+
+        // Process remaining elements
+        for (int index = 1; index < numbers.length; index++) {
+            boolean[] curr = new boolean[targetSum + 1];
+            curr[0] = true; // sum = 0 remains achievable
+
+            for (int sum = 1; sum <= targetSum; sum++) {
+
+                // Exclude current element
+                if (prev[sum]) {
+                    curr[sum] = true;
+                    continue;
+                }
+
+                // Include current element if possible
+                if (numbers[index] <= sum) {
+                    curr[sum] = prev[sum - numbers[index]];
+                }
+            }
+
+            // Move to next iteration
+            prev = curr;
+        }
+
+        return prev[targetSum];
+    }
+    
     /**
      * Bottom-up DP approach for Subset Sum.
      *
