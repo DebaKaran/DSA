@@ -10,11 +10,28 @@ public class PowerXN {
             x = 1 /x;
             n = -n;
         }
-        return myPowRecursively(x, n);
-        
+        //return myPowRecursively(x, n);
+
+        return helper(x, n);
     }
 
+    // Optimized recursive approach
+    // Time Complexity: O(log n)
+    // Space Complexity: O(log n) due to recursion stack
 
+    private double helper(double x, int n) {
+        if(n == 0) return 1;
+        
+        double half = helper(x, n / 2);
+
+        half *= half;
+
+        return n % 2 == 0 ? half : x * half;
+    }
+
+    // Simple recursive approach
+    // Time Complexity: O(n log n)
+    // Space Complexity: O(n) due to recursion stack
     private double myPowRecursively(double x, int n) {
         if(n == 0) return 1;
         if(n % 2 == 0) {
