@@ -17,7 +17,50 @@ public class ValidPalindrome {
         // Normalize input for case-insensitive comparison
         input = input.toLowerCase();
 
-        return checkPalindromeRecursively(input, 0, input.length() - 1);
+        //return checkPalindromeRecursively(input, 0, input.length() - 1);
+
+        return isValidPalindromeTwoPointers(input);
+    }
+
+    /**
+     * Two-pointer technique to validate palindrome.
+     * Time Complexity: O(n)
+     * Space Complexity: O(1)
+     * 
+     */
+    public boolean isValidPalindromeTwoPointers(String s) {
+
+        // Edge cases: null or single-character strings
+        if (s == null || s.length() <= 1) {
+            return true;
+        }
+
+        int left = 0;
+        int right = s.length() - 1;
+
+        while (left < right) {
+
+            // Move left pointer to next alphanumeric character
+            while (left < right && !Character.isLetterOrDigit(s.charAt(left))) {
+                left++;
+            }
+
+            // Move right pointer to previous alphanumeric character
+            while (left < right && !Character.isLetterOrDigit(s.charAt(right))) {
+                right--;
+            }
+
+            // Compare characters (case-insensitive input assumed)
+            if (s.charAt(left) != s.charAt(right)) {
+                return false;
+            }
+
+            // Shrink window
+            left++;
+            right--;
+        }
+
+        return true;
     }
 
     /**
