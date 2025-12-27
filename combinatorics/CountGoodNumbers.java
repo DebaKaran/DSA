@@ -8,7 +8,59 @@ public class CountGoodNumbers {
     public int countGoodNumbers(long n) {
         
         //return countGoodNumbersLinear(n);
-        return countGoodNumbersUsingRepeatedMultiplication(n);
+        //return countGoodNumbersUsingRepeatedMultiplication(n);
+
+        return countGoodNumbersLogarithmic(n);
+    }
+    /**
+     * Counts good numbers using logarithmic exponentiation.
+     * 
+     * Time Complexity: O(log n)
+     * Space Complexity: O(1)
+     * 
+     */
+    private int countGoodNumbersLogarithmic(long n) {
+
+        // Base case: single even index has 5 choices
+        if (n == 1) {
+            return 5;
+        }
+
+        // Each (even, odd) index pair contributes 20 combinations
+        long count = modularPower(20, n / 2);
+
+        // If length is odd, one extra even index contributes 5 choices
+        if (n % 2 != 0) {
+            count = (count * 5) % MOD;
+        }
+
+        return (int) count;
+    }
+
+    /**
+     * Computes (base ^ exponent) % MOD using fast exponentiation.
+     * Time Complexity: O(log exponent)
+     * Space Complexity: O(log exponent)
+     */
+    private long modularPower(int base, long exponent) {
+
+        // Base case
+        if (exponent == 0) {
+            return 1;
+        }
+
+        // Recursive computation on half exponent
+        long half = modularPower(base, exponent / 2) % MOD;
+
+        // Square the half result
+        half = (half * half) % MOD;
+
+        // If exponent is odd, multiply once more by base
+        if (exponent % 2 != 0) {
+            half = (half * base) % MOD;
+        }
+
+        return half;
     }
 
     /**
@@ -18,7 +70,7 @@ public class CountGoodNumbers {
      * Space Complexity: O(1)
      * 
      */
-    
+
     private int countGoodNumbersUsingRepeatedMultiplication(long n) {
         long times = n / 2;
         long total = 1;
