@@ -12,8 +12,14 @@ public class CountGoodNumbers {
 
         return countGoodNumbersLogarithmic(n);
     }
-
-    public int countGoodNumbersLogarithmic(long n) {
+    /**
+     * Counts good numbers using logarithmic exponentiation.
+     * 
+     * Time Complexity: O(log n)
+     * Space Complexity: O(1)
+     * 
+     */
+    private int countGoodNumbersLogarithmic(long n) {
 
         // Base case: single even index has 5 choices
         if (n == 1) {
@@ -33,6 +39,8 @@ public class CountGoodNumbers {
 
     /**
      * Computes (base ^ exponent) % MOD using fast exponentiation.
+     * Time Complexity: O(log exponent)
+     * Space Complexity: O(log exponent)
      */
     private long modularPower(int base, long exponent) {
 
