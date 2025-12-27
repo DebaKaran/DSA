@@ -7,7 +7,31 @@ public class CountGoodNumbers {
 
     public int countGoodNumbers(long n) {
         
-        return countGoodNumbersLinear(n);
+        //return countGoodNumbersLinear(n);
+        return countGoodNumbersUsingRepeatedMultiplication(n);
+    }
+
+    /**
+     * Counts good numbers using repeated multiplication.
+     * 
+     * Time Complexity: O(n/2) which simplifies to O(n)
+     * Space Complexity: O(1)
+     * 
+     */
+    
+    private int countGoodNumbersUsingRepeatedMultiplication(long n) {
+        long times = n / 2;
+        long total = 1;
+        for(int time = 1; time <= times; time++) {
+            total *= 20;
+            total %= MOD;
+        }
+
+        if(n % 2 != 0) {
+            total = (total * 5 % MOD);
+        }
+
+        return (int)total;
     }
     /**
      * Counts good numbers using a linear iteration approach.
