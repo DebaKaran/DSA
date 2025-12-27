@@ -12,8 +12,43 @@ public class GenerateParentheses {
     public List<String> generateParentheses(int n) {
 
         List<String> result = new ArrayList<>();
-        backtrack(n, 0, new StringBuilder(), result);
+        //backtrack(n, 0, new StringBuilder(), result);
+        buildParentheses(n, 0, 0, new StringBuilder(), result);
         return result;
+    }
+
+    /**
+     * Backtracking helper that builds only valid parentheses sequences.
+     * Time Complexity: O Catalan number C(n) ~ O(4^n / (n^(3/2)))
+     * Space Complexity: O(n) for recursion stack
+     */
+    private void buildParentheses(
+            int n,
+            int openCount,
+            int closeCount,
+            StringBuilder currentSequence,
+            List<String> result
+    ) {
+
+        // Base case: valid sequence of length 2n built
+        if (openCount == n && closeCount == n) {
+            result.add(currentSequence.toString());
+            return;
+        }
+
+        // Choice 1: add '(' if we still can
+        if (openCount < n) {
+            currentSequence.append('(');
+            buildParentheses(n, openCount + 1, closeCount, currentSequence, result);
+            currentSequence.setLength(currentSequence.length() - 1); // backtrack
+        }
+
+        // Choice 2: add ')' if it keeps the sequence valid
+        if (closeCount < openCount) {
+            currentSequence.append(')');
+            buildParentheses(n, openCount, closeCount + 1, currentSequence, result);
+            currentSequence.setLength(currentSequence.length() - 1); // backtrack
+        }
     }
 
     /**
