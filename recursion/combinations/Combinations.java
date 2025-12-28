@@ -12,8 +12,41 @@ public class Combinations {
     public List<List<Integer>> combine(int n, int k) {
 
         List<List<Integer>> result = new ArrayList<>();
-        backtrack(n, k, 1, new ArrayList<>(), result);
+        //backtrack(n, k, 1, new ArrayList<>(), result);
+        backtrack2(n, k, 1, new ArrayList<>(), result);
         return result;
+    }
+
+    /**
+     * Backtracking helper using a loop-based approach.
+     */
+    private void backtrack2(
+            int n,
+            int k,
+            int start,
+            List<Integer> currentCombination,
+            List<List<Integer>> result
+    ) {
+
+        // Base case: required k elements selected
+        if (k == 0) {
+            result.add(new ArrayList<>(currentCombination));
+            return;
+        }
+
+        // Loop through possible choices
+        // Upper bound ensures enough remaining numbers
+        for (int i = start; i <= n - k + 1; i++) {
+
+            // Choose current number
+            currentCombination.add(i);
+
+            // Recurse with reduced k and next start
+            backtrack2(n, k - 1, i + 1, currentCombination, result);
+
+            // Backtrack
+            currentCombination.remove(currentCombination.size() - 1);
+        }
     }
 
     /**
