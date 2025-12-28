@@ -1,4 +1,4 @@
-package recursion;
+package recursion.stack;
 import java.util.Stack;
 
 //GFG Problem: https://practice.geeksforgeeks.org/problems/sort-a-stack/1

@@ -1,4 +1,4 @@
-package recursion;
+package recursion.subsequences;
 
 public class SubsequenceSumExists {
 
