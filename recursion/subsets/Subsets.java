@@ -12,9 +12,44 @@ public class Subsets {
     public List<List<Integer>> generateSubsets(int[] nums) {
 
         List<List<Integer>> allSubsets = new ArrayList<>();
-        backtrack(nums, 0, allSubsets, new ArrayList<>());
+       /**backtrack(nums, 0, result, new ArrayList<>());
+
+        return allSubsets; */
+        generateUniqueSubsets(nums, 0, new ArrayList<>(), allSubsets);
 
         return allSubsets;
+    }  
+
+    /**
+     * Backtracking helper.
+     *
+     * At every recursion level, the current subset itself
+     * is a valid subset and must be added to the result.
+     * 
+     * Time Complexity: O(N * 2^N) where N is the length of nums.
+     * Space Complexity: O(N * 2^N) for storing all subsets.
+     */
+    private void generateUniqueSubsets(
+            int[] nums,
+            int startIndex,
+            List<Integer> currentSubset,
+            List<List<Integer>> result
+    ) {
+
+        // Every recursion state represents a valid subset
+        result.add(new ArrayList<>(currentSubset));
+
+        for (int i = startIndex; i < nums.length; i++) {
+
+            // Include current element
+            currentSubset.add(nums[i]);
+
+            // Recurse with next index
+            generateUniqueSubsets(nums, i + 1, currentSubset, result);
+
+            // Backtrack
+            currentSubset.remove(currentSubset.size() - 1);
+        }
     }
 
     /**
