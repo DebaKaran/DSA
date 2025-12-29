@@ -25,7 +25,46 @@ public class CombinationSumIV {
 
         return countWaysMemoized(nums, target, 0, memo); */
 
-        return countWaysRecursive(nums, target);
+        //return countWaysRecursive(nums, target);
+        int[] dp = new int[target + 1];
+        Arrays.fill(dp, -1);
+
+        // Base case: exactly one way to form sum = 0 (empty sequence)
+        dp[0] = 1;
+
+        return countWaysTopDown(nums, target, dp);
+    }
+
+    /**
+     * Top-down DP (memoized recursion).
+     *
+     * dp[t] represents the number of ordered ways to form sum = t.
+     * 
+     * Time Complexity: O(n * target)
+     * Space Complexity: O(target) for dp array
+     */
+    private int countWaysTopDown(int[] nums, int remainingTarget, int[] dp) {
+
+        // If already computed, reuse cached result
+        if (dp[remainingTarget] != -1) {
+            return dp[remainingTarget];
+        }
+
+        int totalWays = 0;
+
+        // Try each number as the next element in the sequence
+        for (int num : nums) {
+            if (remainingTarget >= num) {
+                totalWays += countWaysTopDown(
+                        nums,
+                        remainingTarget - num,
+                        dp
+                );
+            }
+        }
+
+        // Cache and return
+        return dp[remainingTarget] = totalWays;
     }
 
     /**
@@ -59,7 +98,7 @@ public class CombinationSumIV {
     */
 
     //If order matters, index disappears.
-    
+
     private int countWaysRecursive(int[] nums, int remainingTarget) {
 
         // Base case: exact sum achieved
