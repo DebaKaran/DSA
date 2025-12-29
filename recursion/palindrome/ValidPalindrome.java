@@ -1,4 +1,4 @@
-package recursion;
+package recursion.palindrome;
 
 public class ValidPalindrome {
 
