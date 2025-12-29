@@ -26,13 +26,43 @@ public class CombinationSumIV {
         return countWaysMemoized(nums, target, 0, memo); */
 
         //return countWaysRecursive(nums, target);
-        int[] dp = new int[target + 1];
+        /**int[] dp = new int[target + 1];
         Arrays.fill(dp, -1);
 
         // Base case: exactly one way to form sum = 0 (empty sequence)
         dp[0] = 1;
 
-        return countWaysTopDown(nums, target, dp);
+        return countWaysTopDown(nums, target, dp); */
+
+        return countWaysBottomUp(nums, target);
+    }
+
+    /**
+     * Bottom-up DP.
+     *
+     * dp[t] represents the number of ordered ways to form sum = t.
+     * 
+     * Time Complexity: O(n * target)
+     * Space Complexity: O(target) for dp array
+     */
+    private int countWaysBottomUp(int[] nums, int target) {
+        int[] dp = new int[target + 1];
+
+        // Base case: one way to form sum 0 (empty sequence)
+        dp[0] = 1;
+
+        // Build solutions incrementally from sum = 1 to target
+        for (int currentSum = 1; currentSum <= target; currentSum++) {
+
+            // Try each number as the last element in the sequence
+            for (int num : nums) {
+                if (currentSum >= num) {
+                   dp[currentSum] += dp[currentSum - num]; 
+                }
+            }
+        }
+
+        return dp[target];
     }
 
     /**
