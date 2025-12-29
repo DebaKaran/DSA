@@ -10,7 +10,8 @@ public class CombinationSumIV {
      */
     public int combinationSum4(int[] nums, int target) {
         //return countWaysRecursive(nums, target, 0);
-        int[][] memo = new int[nums.length][target + 1];
+
+        /**int[][] memo = new int[nums.length][target + 1];
 
         // Initialize memo table with -1 (uncomputed)
         for (int[] row : memo) {
@@ -22,7 +23,63 @@ public class CombinationSumIV {
             memo[i][0] = 1;
         }
 
-        return countWaysMemoized(nums, target, 0, memo);
+        return countWaysMemoized(nums, target, 0, memo); */
+
+        return countWaysRecursive(nums, target);
+    }
+
+    /**
+     * Recursive helper that counts the number of ways to form
+     * the remaining target.
+     *
+     * NOTE:
+     * This solution is correct but inefficient due to overlapping
+     * subproblems. It must be optimized using memoization or DP.
+     * 
+     * Time Complexity: O(n^target) in worst case
+     * Space Complexity: O(target) for recursion stack
+     * 
+     */
+
+    /*
+    * NOTE:
+    * This solution intentionally does NOT use an index-based state.
+    *
+    * In Combination Sum IV, the order of numbers matters:
+    *   [1,2] and [2,1] are counted as different sequences.
+    *
+    * Because every number can be chosen at every step,
+    * the subproblem is defined solely by the remaining target sum.
+    *
+    * Using an index-based include/exclude approach is unnecessary here
+    * and leads to a redundant or misleading state definition.
+    *
+    * Correct state:
+    *   ways(target) = number of ordered ways to form `target`
+    */
+
+    //If order matters, index disappears.
+    
+    private int countWaysRecursive(int[] nums, int remainingTarget) {
+
+        // Base case: exact sum achieved
+        if (remainingTarget == 0) {
+            return 1;
+        }
+
+        int totalWays = 0;
+
+        // Try each number as the next element in the sequence
+        for (int num : nums) {
+            if (remainingTarget >= num) {
+                totalWays += countWaysRecursive(
+                        nums,
+                        remainingTarget - num
+                );
+            }
+        }
+
+        return totalWays;
     }
 
     /**
