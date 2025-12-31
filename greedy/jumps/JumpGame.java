@@ -1,4 +1,4 @@
-package greedy;
+package greedy.jumps;
 
 /**
  * LeetCode 55 - Jump Game
