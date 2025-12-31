@@ -99,4 +99,60 @@ class PartitionEqualSubsetSum {
         dp[index][targetSum] = 0;
         return 0;
     }
+
+    /**
+     * Baseline recursive solution to check if a subset with the given target sum exists.
+     *
+     * This method is kept for learning and reference purposes to illustrate
+     * the exponential nature of the naive approach.
+     *
+     * @param nums        input array
+     * @param index       current index in the array
+     * @param targetSum   remaining sum to be formed
+     *
+     * @return true if a subset exists that sums to targetSum, false otherwise
+     *
+     * Time Complexity:
+     *   O(2^n) in the worst case, as each element can either be chosen or skipped,
+     *   leading to an exponential number of recursive calls.
+     *
+     * Space Complexity:
+     *   O(n) due to the recursion stack depth.
+     *
+     * Notes:
+     *   - This approach will result in TLE for large inputs.
+     *   - It is intentionally NOT used in the final solution.
+     *   - Memoization or bottom-up DP is required for acceptable performance.
+     */
+    private boolean hasSubsetWithTargetSumRecursive(
+            int[] nums,
+            int index,
+            int targetSum
+    ) {
+
+        // Success condition: exact target achieved
+        if (targetSum == 0) {
+            return true;
+        }
+
+        // Failure conditions
+        if (index >= nums.length || targetSum < 0) {
+            return false;
+        }
+
+        // Try picking each element starting from the current index
+        for (int i = index; i < nums.length; i++) {
+            if (hasSubsetWithTargetSumRecursive(
+                    nums,
+                    i + 1,
+                    targetSum - nums[i]
+            )) {
+                return true;
+            }
+        }
+
+        // No valid subset found
+        return false;
+    }
+
 }
