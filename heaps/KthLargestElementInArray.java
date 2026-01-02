@@ -9,6 +9,7 @@ import java.util.PriorityQueue;
  */
 class KthLargestElementInArray {
 
+    
     /**
      * Returns the Kth largest element in the array.
      *
@@ -20,8 +21,52 @@ class KthLargestElementInArray {
      * Building heap: O(N log N) and Removing k-1 elements: O(k log N)
      * Space Complexity: O(N)
      */
-    public int findKthLargestElement(int[] nums, int k) {
+    public int findKthLargest(int[] nums, int k) {
+        //return findKthLargestUsingSorting(nums, k);
 
+        return findKthLargestUsingMinHeap(nums, k);
+    }
+
+
+    /**
+     * Uses a Min Heap of size K.
+     *
+     * Idea:
+     * - Keep only the K largest elements in the heap.
+     * - The smallest element in the heap (top) is the Kth largest overall.
+     * 
+     * Each insertion/removal: log K and Total elements processed: N 
+     * so it is: O(N log K) — optimal for this problem
+     * 
+     * Time Complexity: O(N log K)
+     * Space Complexity: O(K)
+     */
+    private int findKthLargestUsingMinHeap(int[] nums, int k) {
+
+        // Min Heap: smallest element stays at the top
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+
+        for (int value : nums) {
+            minHeap.offer(value);
+
+            // Ensure heap size never exceeds K
+            if (minHeap.size() > k) {
+                minHeap.poll(); // remove smallest
+            }
+        }
+
+        // Top of heap is the Kth largest element
+        return minHeap.peek();
+    }
+
+
+    /**
+     * Time Complexity: O(N log N)
+     * Building heap: O(N log N) and Removing k-1 elements: O(k log N)
+     * Space Complexity: O(N)
+    */
+
+    private int findKthLargestUsingSorting(int[] nums, int k) {
         // Max Heap: largest element at the top
         PriorityQueue<Integer> maxHeap =
                 new PriorityQueue<>((a, b) -> Integer.compare(b, a));
