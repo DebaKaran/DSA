@@ -1,9 +1,11 @@
-package heaps;
+package heaps.kth;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
+
+import heaps.ListNode;
 
 /**
  * LeetCode 23 - Merge k Sorted Lists
