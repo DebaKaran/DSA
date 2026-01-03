@@ -11,7 +11,62 @@ class KthSmallestElementInSortedMatrix {
 
     public int kthSmallest(int[][] matrix, int k) {
         // return findKthSmallestUsingMaxHeap(matrix, k);   // Baseline
-        return findKthSmallestUsingMinHeap(matrix, k);     // Optimal
+        //return findKthSmallestUsingMinHeap(matrix, k);     // Optimal
+
+       return kthSmallestUsingBinarySearch(matrix, k);
+    }
+
+    // Approach 3 (Optimal):
+    // Uses Binary Search on the value range.
+    // Time Complexity: O(N log (max - min))
+    // Space Complexity: O(1)
+    
+    private int kthSmallestUsingBinarySearch(int[][] matrix, int k) {
+        int n = matrix.length;
+
+        int low = matrix[0][0];
+        int high = matrix[n - 1][n - 1];
+
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+
+            // Count how many elements are <= mid
+            int count = countLessThanOrEqual(matrix, mid);
+
+            if (count < k) {
+                // Kth smallest is larger than mid
+                low = mid + 1;
+            } else {
+                // Kth smallest is <= mid
+                high = mid;
+            }
+        }
+
+        return low;
+    }
+
+    /**
+     * Counts elements <= target in O(N) time.
+     * Uses the sorted row & column property.
+     */
+    private int countLessThanOrEqual(int[][] matrix, int target) {
+        int n = matrix.length;
+        int row = n - 1;
+        int col = 0;
+        int count = 0;
+
+        // Start from bottom-left corner
+        while (row >= 0 && col < n) {
+            if (matrix[row][col] <= target) {
+                // All elements above this are also <= target
+                count += row + 1;
+                col++;
+            } else {
+                row--;
+            }
+        }
+
+        return count;
     }
 
     /**
