@@ -21,10 +21,60 @@ class MergeKSortedLists {
         // return mergeKSortedListsUsingBruteForce(lists);
 
         //Approach 2
-        return mergeKSortedListsSequentially(lists);
+        // return mergeKSortedListsSequentially(lists);
 
         //return mergeKSortedListsUsingMinHeapAllNodes(lists);
+
+        return mergeKSortedListsUsingMinHeap(lists);
         
+    }
+
+    /**
+     * Merges k sorted linked lists using a size-K min heap.
+     *
+     * @param lists array of sorted linked list heads
+     * @return merged sorted linked list
+     *
+     * Time Complexity: O(N log K)
+     *  - Each of the N nodes is inserted and removed from the heap once
+     *  - Heap size never exceeds K
+     *
+     * Space Complexity: O(K)
+     *  - Heap stores at most one node from each list
+     */
+    public ListNode mergeKSortedListsUsingMinHeap(ListNode[] lists) {
+
+        if (lists == null || lists.length == 0) {
+            return null;
+        }
+
+        // Min Heap ordered by node value (stores at most K nodes)
+        PriorityQueue<ListNode> minHeap =
+                new PriorityQueue<>((a, b) -> Integer.compare(a.val, b.val));
+
+        // Initialize heap with the head of each non-empty list
+        for (ListNode head : lists) {
+            if (head != null) {
+                minHeap.offer(head);
+            }
+        }
+
+        // Dummy head to simplify list construction
+        ListNode dummyHead = new ListNode();
+        ListNode tail = dummyHead;
+
+        // Extract the smallest node and push its next node into the heap
+        while (!minHeap.isEmpty()) {
+            ListNode smallestNode = minHeap.poll();
+            tail.next = smallestNode;
+            tail = smallestNode;
+
+            if (smallestNode.next != null) {
+                minHeap.offer(smallestNode.next);
+            }
+        }
+
+        return dummyHead.next;
     }
 
     /**
@@ -172,6 +222,7 @@ class MergeKSortedLists {
      * Space Complexity: O(N)
      *  - Stores all node values in an auxiliary list
      */
+    
     private ListNode mergeKSortedListsUsingBruteForce(ListNode[] lists) {
 
         if (lists == null || lists.length == 0) {
