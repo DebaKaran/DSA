@@ -17,7 +17,13 @@ class MergeKSortedLists {
     
     public ListNode mergeKLists(ListNode[] lists) {
 
-        return mergeKSortedListsUsingMinHeapAllNodes(lists);
+        // Approach 1: Brute-Force Value Collection and Sorting
+        // return mergeKSortedListsUsingBruteForce(lists);
+
+        //Approach 2
+        return mergeKSortedListsSequentially(lists);
+
+        //return mergeKSortedListsUsingMinHeapAllNodes(lists);
         
     }
 
@@ -69,6 +75,77 @@ class MergeKSortedLists {
         return mergedHead;
     }
 
+    /**
+    * LeetCode 23 - Merge k Sorted Lists
+    *
+    * Approach 2 (Baseline / Reference):
+    * Sequentially merges each list into the accumulated result
+    * using in-place merging of two sorted linked lists.
+    *
+    * Note:
+    * - No extra data structures (heap/array) are used.
+    * - Nodes are reused; links are rearranged in place.
+    * - This approach is correct but not optimal in time complexity.
+    */
+     /**
+     * Merges k sorted linked lists sequentially without extra space.
+     *
+     * @param lists array of sorted linked list heads
+     * @return merged sorted linked list
+     *
+     * Time Complexity: O(N * K ^ 2) in the worst case
+     *  - Each merge may traverse the accumulated list
+     *
+     * Space Complexity: O(1)
+     *  - Only constant auxiliary space (dummy node)
+     */
+    public ListNode mergeKSortedListsSequentially(ListNode[] lists) {
+
+        if (lists == null || lists.length == 0) {
+            return null;
+        }
+
+        ListNode mergedHead = null;
+
+        // Merge each list into the accumulated result
+        for (ListNode currentList : lists) {
+            mergedHead = mergeTwoSortedListsInPlace(currentList, mergedHead);
+        }
+
+        return mergedHead;
+    }
+
+    /**
+     * Merges two sorted linked lists in place.
+     *
+     * @param list1 first sorted list
+     * @param list2 second sorted list
+     * @return merged sorted list
+     */
+    private ListNode mergeTwoSortedListsInPlace(ListNode list1, ListNode list2) {
+
+        if (list1 == null) return list2;
+        if (list2 == null) return list1;
+
+        ListNode dummyHead = new ListNode();
+        ListNode tail = dummyHead;
+
+        while (list1 != null && list2 != null) {
+            if (list1.val <= list2.val) {
+                tail.next = list1;
+                list1 = list1.next;
+            } else {
+                tail.next = list2;
+                list2 = list2.next;
+            }
+            tail = tail.next;
+        }
+
+        // Attach remaining nodes
+        tail.next = (list1 != null) ? list1 : list2;
+
+        return dummyHead.next;
+    }
     /**
     * Approach 1: Brute-Force Value Collection and Sorting
     *
