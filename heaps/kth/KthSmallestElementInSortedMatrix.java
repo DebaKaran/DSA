@@ -5,45 +5,84 @@ import java.util.PriorityQueue;
 /**
  * LeetCode 378 - Kth Smallest Element in a Sorted Matrix
  *
- * This solution uses a Max Heap of fixed size K to keep track
- * of the K smallest elements seen so far.
+ * Contains multiple approaches for learning and comparison.
  */
 class KthSmallestElementInSortedMatrix {
 
+    public int kthSmallest(int[][] matrix, int k) {
+        // return findKthSmallestUsingMaxHeap(matrix, k);   // Baseline
+        return findKthSmallestUsingMinHeap(matrix, k);     // Optimal
+    }
+
     /**
-     * Returns the Kth smallest element in a sorted matrix.
-     *
-     * @param matrix sorted matrix (row-wise and column-wise)
-     * @param k      position of the smallest element to find (1-based)
-     * @return kth smallest element
+     * Approach 1 (Baseline):
+     * Uses a fixed-size Max Heap to keep track of the K smallest elements.
      *
      * Time Complexity: O(M * N * log K)
-     *  - Each of the M*N elements is pushed into the heap
-     *  - Heap size is capped at K
-     *
      * Space Complexity: O(K)
-     *  - Max heap stores at most K elements
      */
-    public int findKthSmallest(int[][] matrix, int k) {
+    private int findKthSmallestUsingMaxHeap(int[][] matrix, int k) {
 
-        // Max Heap: largest element stays at the top
+        // Max Heap: largest element at the top
         PriorityQueue<Integer> maxHeap =
                 new PriorityQueue<>((a, b) -> Integer.compare(b, a));
 
-        // Process every element in the matrix
         for (int[] row : matrix) {
             for (int value : row) {
                 maxHeap.offer(value);
 
-                // Keep only the K smallest elements in the heap
+                // Keep heap size bounded to K
                 if (maxHeap.size() > k) {
                     maxHeap.poll();
                 }
             }
         }
 
-        // Root of max heap is the Kth smallest element
+        // Top of max heap is the Kth smallest element
         return maxHeap.peek();
     }
-}
 
+    /**
+     * Approach 2 (Optimal):
+     * Uses a Min Heap with row pointers (k-way merge).
+     *
+     * Time Complexity: O(K log N)
+     * Space Complexity: O(N)
+     *
+     * where N = number of rows
+     */
+    private int findKthSmallestUsingMinHeap(int[][] matrix, int k) {
+
+        // Min Heap storing {value, rowIndex, colIndex}
+        PriorityQueue<int[]> minHeap =
+                new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));
+
+        // Initialize heap with the first element of each row
+        for (int row = 0; row < matrix.length; row++) {
+            minHeap.offer(new int[] { matrix[row][0], row, 0 });
+        }
+
+        int extractedCount = 0;
+
+        // Extract the smallest element K-1 times
+        while (extractedCount < k - 1) {
+            extractedCount++;
+
+            int[] smallest = minHeap.poll();
+            int row = smallest[1];
+            int col = smallest[2];
+
+            // Push the next element from the same row, if available
+            if (col + 1 < matrix[row].length) {
+                minHeap.offer(new int[] {
+                        matrix[row][col + 1],
+                        row,
+                        col + 1
+                });
+            }
+        }
+
+        // The root now contains the Kth smallest element
+        return minHeap.peek()[0];
+    }
+}
