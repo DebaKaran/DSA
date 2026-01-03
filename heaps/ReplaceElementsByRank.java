@@ -1,6 +1,7 @@
 package heaps;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,50 @@ class ReplaceElementsByRank {
         List<Integer> result = new ArrayList<>();
         for (int value : numbers) {
             result.add(valueToRankMap.get(value));
+        }
+
+        return result;
+    }
+
+    /**
+     * Replaces each element with its rank in the sorted unique array.
+     *
+     * @param numbers input list of integers
+     * @return list of ranks in original order
+     *
+     * Time Complexity: O(N log N)
+     *  - Sorting dominates
+     *
+     * Space Complexity: O(N)
+     *  - Copy array + HashMap
+     */
+    public List<Integer> replaceWithRankWithSortedArray(List<Integer> numbers) {
+
+        int n = numbers.size();
+
+        // Step 1: Copy elements to an array
+        int[] sorted = new int[n];
+        for (int i = 0; i < n; i++) {
+            sorted[i] = numbers.get(i);
+        }
+
+        // Step 2: Sort the array
+        Arrays.sort(sorted);
+
+        // Step 3: Assign ranks to unique elements
+        Map<Integer, Integer> valueToRank = new HashMap<>();
+        int rank = 1;
+
+        for (int i = 0; i < n; i++) {
+            if (!valueToRank.containsKey(sorted[i])) {
+                valueToRank.put(sorted[i], rank++);
+            }
+        }
+
+        // Step 4: Build result using original order
+        List<Integer> result = new ArrayList<>(n);
+        for (int value : numbers) {
+            result.add(valueToRank.get(value));
         }
 
         return result;
