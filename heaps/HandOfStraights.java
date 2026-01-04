@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.TreeMap;
 
 /**
  * LeetCode 846 - Hand of Straights
@@ -32,7 +33,48 @@ class HandOfStraights {
             return false;
         }
 
-        return canFormConsecutiveGroupsUsingHeap(hand, groupSize);
+        // return canFormConsecutiveGroupsUsingHeap(hand, groupSize);
+         return canFormConsecutiveGroups(hand, groupSize);
+    }
+
+    /**
+     * Greedy helper that forms consecutive groups using TreeMap.
+     */
+    private boolean canFormConsecutiveGroups(int[] cards, int groupSize) {
+
+        // Step 1: Count frequency of each card
+        TreeMap<Integer, Integer> frequencyMap = new TreeMap<>();
+        for (int card : cards) {
+            frequencyMap.put(card, frequencyMap.getOrDefault(card, 0) + 1);
+        }
+
+        // Step 2: Form groups greedily
+        while (!frequencyMap.isEmpty()) {
+
+            // Always start from the smallest available card
+            int startCard = frequencyMap.firstKey();
+
+            // Try to build one group of size = groupSize
+            for (int currentCard = startCard;
+                 currentCard < startCard + groupSize;
+                 currentCard++) {
+
+                if (!frequencyMap.containsKey(currentCard)) {
+                    return false;
+                }
+
+                int count = frequencyMap.get(currentCard);
+
+                // Decrease frequency or remove card
+                if (count == 1) {
+                    frequencyMap.remove(currentCard);
+                } else {
+                    frequencyMap.put(currentCard, count - 1);
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
