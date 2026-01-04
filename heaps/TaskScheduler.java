@@ -22,7 +22,51 @@ class TaskScheduler {
      * @return minimum time units required
      */
     public int leastInterval(char[] tasks, int cooldown) {
-        return scheduleTasksUsingMaxHeap(tasks, cooldown);
+        // return scheduleTasksUsingMaxHeap(tasks, cooldown);
+         return scheduleTasksUsingGreedy(tasks, cooldown);
+    }
+
+    /**
+     * Greedy approach using task frequency analysis.
+     *
+     * Idea:
+     * - Find the maximum frequency of any task.
+     * - Count how many tasks have this maximum frequency.
+     * - Use the formula:
+     *   max(tasks.length, (maxFreq - 1) * (cooldown + 1) + countMax)
+     * 
+     *  Time Complexity: O(N) Single pass to count tasks
+     *  Space Complexity: O(1)
+     *  - At most 26 unique tasks (A–Z)
+     */
+    private int scheduleTasksUsingGreedy(char[] tasks, int cooldown) {
+
+        // Step 1: Count frequency of each task
+        Map<Character, Integer> taskFrequencyMap = new HashMap<>();
+        for (char task : tasks) {
+            taskFrequencyMap.put(task,
+                    taskFrequencyMap.getOrDefault(task, 0) + 1);
+        }
+
+        // Step 2: Find maximum frequency and its count
+        int maxFrequency = 0;
+        int maxFrequencyTaskCount = 0;
+
+        for (int frequency : taskFrequencyMap.values()) {
+            if (frequency > maxFrequency) {
+                maxFrequency = frequency;
+                maxFrequencyTaskCount = 1;
+            } else if (frequency == maxFrequency) {
+                maxFrequencyTaskCount++;
+            }
+        }
+
+        // Step 3: Apply greedy formula
+        int minimumIntervals =
+                (maxFrequency - 1) * (cooldown + 1) + maxFrequencyTaskCount;
+
+        // Result is max of total tasks or computed minimum
+        return Math.max(tasks.length, minimumIntervals);
     }
 
     /**
